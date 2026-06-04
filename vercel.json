@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://introduces-occurred-seen-historical.trycloudflare.com/api/:path*"
+    }
+  ]
+}
