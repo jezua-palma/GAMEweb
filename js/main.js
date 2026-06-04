@@ -888,7 +888,15 @@
                         if (wasBlocked || wasClosed) {
                             const origin = window.location.origin || 'this site';
                             googleCredentialOverride = null;
-                            onError(`Google prompt was blocked or closed. Use the Google button instead, and confirm ${origin} is allowed in Google Cloud.`);
+                            const reason = notification?.getNotDisplayedReason?.() || notification?.getSkippedReason?.() || 'unknown';
+                            console.warn('[Shadow Depths] Google One Tap blocked. Reason:', reason, '| Origin:', origin);
+                            if (reason === 'opt_out_or_no_session') {
+                                onError('No Google session found. Sign into Google in this browser first, then try again.');
+                            } else if (reason === 'suppressed_by_user') {
+                                onError('Google sign-in was previously dismissed. Use the "Continue with Google" button below.');
+                            } else {
+                                onError(`Google sign-in blocked (${reason}). Make sure "${origin}" is listed in your Google Cloud Console → APIs & Services → Credentials → OAuth Client → Authorized JavaScript Origins.`);
+                            }
                         }
                     });
                     return;
