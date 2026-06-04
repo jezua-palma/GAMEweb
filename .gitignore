@@ -21,3 +21,5 @@ __pycache__/
 .env
 .vscode/
 .idea/
+
+.vercel

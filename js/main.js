@@ -573,6 +573,7 @@
         const googleClientIdSetup = document.getElementById('google-clientid-setup');
         const googleClientIdInput = document.getElementById('google-clientid-input');
         const googleClientIdSaveBtn = document.getElementById('google-clientid-save-btn');
+        const toggleGoogleSetupBtn = document.getElementById('toggle-google-setup');
         const forgotLink = document.getElementById('show-forgot-password');
         const forgotOverlay = document.getElementById('forgot-overlay');
         const forgotIdentifierInput = document.getElementById('forgot-identifier');
@@ -595,7 +596,7 @@
         function readGoogleClientId() {
             const metaId = (googleClientIdMeta?.content || '').trim();
             const storedId = String(localStorage.getItem(GOOGLE_CLIENT_ID_STORAGE_KEY) || '').trim();
-            googleClientId = metaId || storedId;
+            googleClientId = storedId || metaId;
             return googleClientId;
         }
 
@@ -1238,8 +1239,11 @@
             const saveGoogleClientId = () => {
                 const value = String(googleClientIdInput.value || '').trim();
                 if (!value) {
+                    localStorage.removeItem(GOOGLE_CLIENT_ID_STORAGE_KEY);
+                    googleClientId = readGoogleClientId();
                     const err = document.getElementById('login-error');
-                    if (err) err.textContent = 'Warning: Paste your Google Client ID first.';
+                    if (err) err.textContent = 'Google Client ID reset to default.';
+                    refreshGoogleAuthUI();
                     return;
                 }
                 localStorage.setItem(GOOGLE_CLIENT_ID_STORAGE_KEY, value);
@@ -1254,6 +1258,13 @@
                 if (e.key !== 'Enter') return;
                 e.preventDefault();
                 saveGoogleClientId();
+            });
+        }
+
+        if (toggleGoogleSetupBtn && googleClientIdSetup) {
+            toggleGoogleSetupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                googleClientIdSetup.classList.toggle('hidden');
             });
         }
 
