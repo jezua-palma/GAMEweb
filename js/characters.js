@@ -14,9 +14,10 @@ const Characters = (() => {
             color: '#ef4444',
             colorDark: '#991b1b',
             colorGlow: 'rgba(239,68,68,0.5)',
-            description: 'Devastating melee fighter. Highest damage output but fragile. Kill fast or die trying.',
+            description: 'Devastating melee fighter. Highest damage output but fragile. Active Cleave skill triggers on dash.',
             stats: { maxHp: 4, speed: 145, damage: 3.0, dashCooldown: 1.2, armor: 0 },
             attackMode: 'melee',
+            skill: { cooldown: 5.0 },
             weaponTiers: [
                 { name: 'Iron Sword',    icon: '🗡️', damage: 3.0, range: 52, arc: 0.7 },
                 { name: 'Battle Axe',   icon: '🪓', damage: 4.2, range: 60, arc: 0.9 },
@@ -72,9 +73,10 @@ const Characters = (() => {
             color: '#f59e0b',
             colorDark: '#b45309',
             colorGlow: 'rgba(245,158,11,0.5)',
-            description: 'Unbreakable holy tank. Highest HP and armor with HP regeneration. Holds the line.',
+            description: 'Unbreakable holy tank. Highest HP and armor with HP regeneration. Active Holy Bastion skill triggers on dash.',
             stats: { maxHp: 7, speed: 105, damage: 1.5, dashCooldown: 1.8, armor: 3 },
             attackMode: 'melee',
+            skill: { cooldown: 7.5 },
             weaponTiers: [
                 { name: 'Holy Mace',     icon: '🔨', damage: 1.5, range: 48, arc: 0.6 },
                 { name: 'Sacred Hammer', icon: '⚒️', damage: 2.2, range: 54, arc: 0.8 },

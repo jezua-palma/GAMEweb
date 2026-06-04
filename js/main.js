@@ -210,6 +210,45 @@
         }, 6500);
     }
 
+    function escapeHtml(text) {
+        return String(text || '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function renderAuthLeaderboardPreview() {
+        const previewEl = document.getElementById('auth-leaderboard-preview');
+        if (!previewEl) return;
+
+        if (typeof Leaderboard === 'undefined' || !Leaderboard || typeof Leaderboard.getEntries !== 'function') {
+            previewEl.innerHTML = '<div class="leaderboard-preview-loading">Leaderboard system offline.</div>';
+            return;
+        }
+
+        const entries = Leaderboard.getEntries('score');
+        if (!entries || entries.length === 0) {
+            previewEl.innerHTML = '<div class="leaderboard-preview-loading">No legends yet. Claim your spot!</div>';
+            return;
+        }
+
+        const top3 = entries.slice(0, 3);
+        let html = '';
+        top3.forEach((e, idx) => {
+            const rankLabel = ['🥇', '🥈', '🥉'][idx] || (idx + 1);
+            html += `
+                <div class="auth-lb-entry">
+                    <div class="auth-lb-rank rank-${idx + 1}">${rankLabel}</div>
+                    <div class="auth-lb-name">${escapeHtml(e.username)}</div>
+                    <div class="auth-lb-value">${Utils.formatNumber(e.score)}</div>
+                </div>
+            `;
+        });
+        previewEl.innerHTML = html;
+    }
+
     function getWarmGoal(stats) {
         if (stats.totalRuns === 0) return 'Goal: Complete your first run';
         if (stats.bestFloor < 5) return 'Goal: Reach Floor 5';
@@ -510,6 +549,7 @@
                     } else {
                         switchScreen('auth-screen');
                         startAuthWelcomeRotation();
+                        renderAuthLeaderboardPreview();
                     }
                 }, 500);
             }
@@ -1412,6 +1452,7 @@
             stopMenuClock();
             switchScreen('auth-screen');
             startAuthWelcomeRotation();
+            renderAuthLeaderboardPreview();
             refreshContinueButton();
             resetAuthForms();
         });

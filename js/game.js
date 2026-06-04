@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    GAME â€” Core game engine with Level/Stage system
    ============================================ */
 
@@ -2311,8 +2311,108 @@ const Game = (() => {
         return forces.slice(0, 96);
     }
 
+    function drawAtmosphericLighting() {
+        if (!canvas || !ctx) return;
+        ctx.save();
+        // 1. Draw the dark ambient overlay
+        ctx.fillStyle = 'rgba(4, 4, 6, 0.78)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 2. Set composite operation to erase light holes
+        ctx.globalCompositeOperation = 'destination-out';
+
+        // 3. Punch player light hole
+        if (player && player.alive) {
+            const px = player.x - camera.x;
+            const py = player.y - camera.y;
+            const r = 180;
+            const grad = ctx.createRadialGradient(px, py, 0, px, py, r);
+            grad.addColorStop(0, 'rgba(0, 0, 0, 1.0)');
+            grad.addColorStop(0.3, 'rgba(0, 0, 0, 0.8)');
+            grad.addColorStop(1.0, 'rgba(0, 0, 0, 0.0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(px, py, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // 4. Punch boss light hole
+        if (boss && boss.alive) {
+            const bx = boss.x - camera.x;
+            const by = boss.y - camera.y;
+            // Boss light has a heavy pulsating glow
+            const pulse = Math.sin(Date.now() / 180) * 20;
+            const r = 260 + pulse;
+            const grad = ctx.createRadialGradient(bx, by, 0, bx, by, r);
+            grad.addColorStop(0, 'rgba(0, 0, 0, 1.0)');
+            grad.addColorStop(0.4, 'rgba(0, 0, 0, 0.7)');
+            grad.addColorStop(1.0, 'rgba(0, 0, 0, 0.0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(bx, by, r, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // 5. Punch torches light holes
+        if (dungeon && dungeon.torchPositions) {
+            const ts = Dungeon.TILE_SIZE || 40;
+            const startCol = Math.max(0, Math.floor(camera.x / ts) - 1);
+            const endCol   = Math.min(dungeon.width,  Math.ceil((camera.x + canvas.width) / ts) + 1);
+            const startRow = Math.max(0, Math.floor(camera.y / ts) - 1);
+            const endRow   = Math.min(dungeon.height, Math.ceil((camera.y + canvas.height) / ts) + 1);
+
+            for (const torch of dungeon.torchPositions) {
+                if (torch.x < startCol || torch.x > endCol) continue;
+                if (torch.y < startRow || torch.y > endRow) continue;
+
+                const sx = torch.x * ts + ts / 2 - camera.x;
+                const sy = torch.y * ts + ts / 2 - camera.y;
+                const flicker = Math.sin((dungeon.torchTimer || 0) * 8 + torch.flickerOffset) * 0.12 + 0.88;
+                const r = 110 * flicker;
+
+                const grad = ctx.createRadialGradient(sx, sy, 0, sx, sy, r);
+                grad.addColorStop(0, 'rgba(0, 0, 0, 1.0)');
+                grad.addColorStop(0.3, 'rgba(0, 0, 0, 0.75)');
+                grad.addColorStop(1.0, 'rgba(0, 0, 0, 0.0)');
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(sx, sy, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // 6. Punch chest light holes
+        if (dungeon) {
+            const ts = Dungeon.TILE_SIZE || 40;
+            const startCol = Math.max(0, Math.floor(camera.x / ts) - 1);
+            const endCol   = Math.min(dungeon.width,  Math.ceil((camera.x + canvas.width) / ts) + 1);
+            const startRow = Math.max(0, Math.floor(camera.y / ts) - 1);
+            const endRow   = Math.min(dungeon.height, Math.ceil((camera.y + canvas.height) / ts) + 1);
+
+            for (let row = startRow; row < endRow; row++) {
+                for (let col = startCol; col < endCol; col++) {
+                    if (dungeon.grid[row]?.[col] === Dungeon.TILE.CHEST) {
+                        const cx = col * ts + ts / 2 - camera.x;
+                        const cy = row * ts + ts / 2 - camera.y;
+                        const r = 115;
+                        const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+                        grad.addColorStop(0, 'rgba(0, 0, 0, 1.0)');
+                        grad.addColorStop(0.2, 'rgba(0, 0, 0, 0.65)');
+                        grad.addColorStop(1.0, 'rgba(0, 0, 0, 0.0)');
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+        }
+
+        ctx.restore();
+    }
+
     function render() {
-        // Background â€” use theme bg color
+        // Background — use theme bg color
         const bgColor = dungeon ? dungeon.theme.bgColor : '#050508';
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -2336,10 +2436,15 @@ const Game = (() => {
         player.draw(ctx, camera);
         Particles.draw(ctx, camera);
 
+        // Ambient lighting pass
+        if (!settings.performanceMode) {
+            drawAtmosphericLighting();
+        }
+
         ctx.restore();
         renderCombatImpactOverlay();
 
-        // Vignette â€” themed color
+        // Vignette — themed color
         if (!settings.performanceMode) {
             const vig = ctx.createRadialGradient(
                 canvas.width / 2, canvas.height / 2, canvas.width * 0.28,
@@ -2348,6 +2453,19 @@ const Game = (() => {
             vig.addColorStop(0, 'rgba(0,0,0,0)');
             vig.addColorStop(1, `${bgColor}cc`);
             ctx.fillStyle = vig;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Damage flash vignette overlay (low-HP warning)
+        if (player.hitFlash > 0) {
+            const hitIntensity = Math.min(0.65, player.hitFlash);
+            const hitVig = ctx.createRadialGradient(
+                canvas.width / 2, canvas.height / 2, canvas.width * 0.3,
+                canvas.width / 2, canvas.height / 2, canvas.width * 0.75
+            );
+            hitVig.addColorStop(0, 'rgba(239, 68, 68, 0)');
+            hitVig.addColorStop(1, `rgba(239, 68, 68, ${hitIntensity * 0.75})`);
+            ctx.fillStyle = hitVig;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
@@ -2381,7 +2499,7 @@ const Game = (() => {
         Utils.showScreen('menu-screen');
     }
 
-    // â”€â”€ Boss HP bar helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ————————————————————————————————————————————————————————————————————————————————————————
     function showBossBar(b) {
         const wrap = document.getElementById('boss-hpbar-wrap');
         if (!wrap) return;
@@ -2522,5 +2640,6 @@ const Game = (() => {
         get running() { return running; },
         get settings() { return settings; },
         get boss()    { return boss; },
+        get enemies() { return enemies; },
     };
 })();

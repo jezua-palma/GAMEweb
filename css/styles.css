@@ -634,17 +634,17 @@ body.screen-switching .screen.active {
     overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     height: 100dvh;
     min-height: 100dvh;
-    padding: clamp(10px, 3vh, 28px) 12px max(14px, env(safe-area-inset-bottom, 0px));
+    padding: clamp(10px, 3vh, 40px) 16px max(16px, env(safe-area-inset-bottom, 0px));
     overscroll-behavior-y: contain;
     touch-action: pan-y;
 }
 
 #auth-screen.active {
-    align-items: flex-start;
+    align-items: center;
 }
 
 /* ── Animated background ── */
@@ -693,10 +693,252 @@ body.screen-switching .screen.active {
     pointer-events: none;
 }
 
-/* ── Card ── */
+/* ── Container Wrapper ── */
+.auth-container {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    width: min(1000px, 100%);
+    min-height: 640px;
+    background: linear-gradient(165deg, rgba(8, 11, 24, 0.94), rgba(4, 7, 14, 0.9));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(125, 211, 252, 0.22);
+    border-radius: 24px;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 24px 60px rgba(0,0,0,0.65),
+        0 0 84px rgba(56, 189, 248, 0.12);
+    overflow: hidden;
+    animation: cardEntrance 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    margin: 0 auto;
+    z-index: 1;
+}
+
+/* ── Showcase Column ── */
+.auth-showcase {
+    padding: 44px;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.45) 0%, rgba(8, 47, 73, 0.2) 100%);
+    border-right: 1px solid rgba(125, 211, 252, 0.14);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.showcase-content {
+    max-width: 480px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.showcase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.showcase-icon {
+    font-size: 2.6rem;
+    filter: drop-shadow(0 0 12px var(--cyan-glow));
+    animation: swordPulse 3s ease-in-out infinite;
+}
+
+.showcase-logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.showcase-logo-text .logo-shadow {
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+    line-height: 1;
+}
+
+.showcase-logo-text .logo-depths {
+    font-size: 1.1rem;
+    letter-spacing: 8px;
+    margin-top: 4px;
+    line-height: 1;
+}
+
+.showcase-tagline {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 36px;
+    font-style: italic;
+}
+
+.showcase-section {
+    margin-bottom: 30px;
+}
+
+.showcase-section-title {
+    font-family: var(--font-game);
+    font-size: 0.65rem;
+    color: var(--cyan-primary);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 10px var(--cyan-glow);
+}
+
+/* Leaderboard Preview Card */
+.showcase-leaderboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(10, 10, 22, 0.65);
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    border-radius: 12px;
+    padding: 16px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.leaderboard-preview-loading {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    padding: 8px;
+}
+
+.auth-lb-entry {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.8rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all 0.25s ease;
+}
+
+.auth-lb-entry:hover {
+    background: rgba(124, 58, 237, 0.08);
+    border-color: rgba(124, 58, 237, 0.25);
+    transform: translateX(4px);
+}
+
+.auth-lb-entry.self {
+    background: rgba(6, 182, 212, 0.08);
+    border-color: rgba(6, 182, 212, 0.3);
+}
+
+.auth-lb-rank {
+    width: 24px;
+    text-align: center;
+    font-weight: 800;
+}
+.auth-lb-rank.rank-1 { color: #fbbf24; text-shadow: 0 0 8px rgba(251, 191, 36, 0.45); }
+.auth-lb-rank.rank-2 { color: #cbd5e1; }
+.auth-lb-rank.rank-3 { color: #b45309; }
+
+.auth-lb-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.auth-lb-value {
+    font-family: var(--font-game);
+    font-size: 0.58rem;
+    color: var(--gold-light);
+}
+
+/* Relics Grid in Showcase */
+.showcase-relics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.relic-item {
+    font-size: 1.8rem;
+    height: 56px;
+    background: rgba(15, 15, 30, 0.6);
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.relic-item:hover {
+    transform: scale(1.1) translateY(-3px);
+    border-color: var(--cyan-primary);
+    box-shadow: 0 0 15px var(--cyan-glow);
+}
+
+/* Relic Tooltip */
+.relic-item::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%) scale(0.85);
+    background: rgba(5, 5, 8, 0.94);
+    border: 1px solid rgba(6, 182, 212, 0.35);
+    color: #bae6fd;
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.relic-item:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+/* ── Card (embedded inside container) ── */
+.auth-container .auth-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-container .auth-card::before,
+.auth-container .auth-card::after {
+    display: none;
+}
+
+@media (max-width: 840px) {
+    .auth-container {
+        grid-template-columns: 1fr;
+        width: 100%;
+        max-width: 460px;
+        min-height: auto;
+    }
+    .auth-showcase {
+        display: none;
+    }
+    .auth-container .auth-card {
+        background: linear-gradient(165deg, rgba(11, 16, 32, 0.92), rgba(8, 13, 26, 0.88));
+        border: 1px solid rgba(125, 211, 252, 0.24);
+        border-radius: 24px;
+        box-shadow:
+            0 0 0 1px rgba(255,255,255,0.04) inset,
+            0 24px 60px rgba(0,0,0,0.6),
+            0 0 84px rgba(56, 189, 248, 0.14);
+    }
+    .auth-container .auth-card::before,
+    .auth-container .auth-card::after {
+        display: block;
+    }
+}
+
 .auth-card {
-    --pointer-x: 50%;
-    --pointer-y: 22%;
     position: relative;
     z-index: 1;
     width: min(460px, 100%);

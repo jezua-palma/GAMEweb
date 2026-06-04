@@ -33,133 +33,189 @@
 
         <!-- Animated background -->
         <div class="auth-bg">
+<body>
+    <!-- ===== LOADING SCREEN ===== -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <span class="logo-shadow">SHADOW</span>
+                <span class="logo-depths">DEPTHS</span>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loading-bar"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Initializing...</p>
+        </div>
+        <div class="particles" id="loading-particles"></div>
+    </div>
+
+    <!-- ===== AUTH SCREEN ===== -->
+    <div id="auth-screen" class="screen">
+
+        <!-- Animated background -->
+        <div class="auth-bg">
             <div class="auth-bg-orb auth-bg-orb-1"></div>
             <div class="auth-bg-orb auth-bg-orb-2"></div>
             <div class="auth-bg-orb auth-bg-orb-3"></div>
             <div class="auth-particles" id="auth-particles"></div>
         </div>
 
-        <!-- Centered card -->
-        <div class="auth-card">
-
-            <!-- Logo -->
-            <div class="auth-card-logo">
-                <div class="auth-logo-icon">ATK</div>
-                <div class="auth-logo-text">
-                    <span class="logo-shadow">SHADOW</span>
-                    <span class="logo-depths">DEPTHS</span>
-                </div>
-                <p class="auth-tagline">Descend into darkness. Rise as a legend.</p>
-                <div class="auth-welcome-block">
-                    <span class="auth-welcome-kicker" id="auth-greeting">Welcome, adventurer.</span>
-                    <p class="auth-motd" id="auth-motd">Sign in to continue your run, challenge friends, and collect rare relics.</p>
-                </div>
-                <div class="auth-benefits" aria-hidden="true">
-                    <span class="auth-benefit-pill">Quick Login</span>
-                    <span class="auth-benefit-pill">Saved Progress</span>
-                    <span class="auth-benefit-pill">Co-op Ready</span>
-                </div>
-            </div>
-
-            <!-- Tab switcher -->
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tab-login">Sign In</button>
-                <button class="auth-tab" id="tab-register">Register</button>
-                <div class="auth-tab-indicator" id="auth-tab-indicator"></div>
-            </div>
-
-            <!-- Login Form -->
-            <div id="login-form" class="auth-form">
-                <div class="input-group">
-                    <label for="login-username">
-                        <span class="input-icon">USR</span> Username or Email
-                    </label>
-                    <input type="text" id="login-username" placeholder="Enter username or email..." autocomplete="username">
-                </div>
-                <div class="input-group">
-                    <label for="login-password">
-                        <span class="input-icon">PWD</span> Password
-                    </label>
-                    <div class="input-field-wrap">
-                        <input type="password" id="login-password" placeholder="Enter your password...">
-                        <button class="input-eye-btn" type="button" data-toggle-password="login-password" aria-label="Show password">Show</button>
+        <!-- Centered card wrapper -->
+        <div class="auth-container">
+            <!-- Left panel: Showcase & Live Leaderboard -->
+            <div class="auth-showcase">
+                <div class="showcase-content">
+                    <div class="showcase-header">
+                        <div class="showcase-icon">⚔️</div>
+                        <div class="showcase-logo-text">
+                            <span class="logo-shadow">SHADOW</span>
+                            <span class="logo-depths">DEPTHS</span>
+                        </div>
                     </div>
-                </div>
-                <div class="auth-inline-links">
-                    <a href="#" id="show-forgot-password">Forgot password?</a>
-                </div>
-                <div class="auth-error" id="login-error"></div>
-                <button class="btn btn-primary" id="login-btn">
-                    <span class="btn-text" id="login-btn-text">ATK Enter the Depths</span>
-                    <span class="btn-glow"></span>
-                </button>
-                <div class="auth-social-block">
-                    <div class="google-rendered-button" id="google-login-rendered" aria-label="Sign in with Google"></div>
-                    <button class="btn btn-secondary auth-google-btn hidden" id="google-login-btn" type="button">Sign in with Google</button>
-                    <div class="auth-field-note" id="google-login-note">Use your Google account for quick login.</div>
-                    <div class="google-clientid-setup hidden" id="google-clientid-setup">
-                        <label for="google-clientid-input" class="google-clientid-label">Google Client ID</label>
-                        <div class="google-clientid-row">
-                            <input type="text" id="google-clientid-input" placeholder="Paste *.apps.googleusercontent.com" autocomplete="off">
-                            <button class="btn btn-secondary google-clientid-save" id="google-clientid-save-btn" type="button">Save</button>
+                    <p class="showcase-tagline">A procedurally generated 2D roguelike forest adventure.</p>
+                    
+                    <div class="showcase-section">
+                        <div class="showcase-section-title">🏆 HALL OF LEGENDS</div>
+                        <div class="showcase-leaderboard" id="auth-leaderboard-preview">
+                            <!-- Populated dynamically via JS -->
+                            <div class="leaderboard-preview-loading">Reading high scores...</div>
+                        </div>
+                    </div>
+
+                    <div class="showcase-section showcase-relics-sec">
+                        <div class="showcase-section-title">🔮 CLASS RELICS</div>
+                        <div class="showcase-relics-grid">
+                            <div class="relic-item" data-tooltip="Warrior's Blade">⚔️</div>
+                            <div class="relic-item" data-tooltip="Mage's Staff">🔮</div>
+                            <div class="relic-item" data-tooltip="Paladin's Shield">🛡️</div>
+                            <div class="relic-item" data-tooltip="Rogue's Dagger">🗡️</div>
                         </div>
                     </div>
                 </div>
-                <p class="auth-switch">No account yet? <a href="#" id="show-register">Create one -></a></p>
             </div>
 
-            <!-- Register Form -->
-            <div id="register-form" class="auth-form hidden">
-                <div class="input-group">
-                    <label for="reg-username">
-                        <span class="input-icon">USR</span> Username
-                    </label>
-                    <input type="text" id="reg-username" placeholder="Choose your name..." autocomplete="off">
-                    <div class="auth-field-note" id="reg-username-note">2-16 characters. Keep it easy to remember.</div>
-                </div>
-                <div class="input-group">
-                    <label for="reg-email">
-                        <span class="input-icon">MAIL</span> Email
-                    </label>
-                    <input type="email" id="reg-email" placeholder="you@gmail.com" autocomplete="email">
-                    <div class="auth-field-note" id="reg-email-note">Required for Google verification and password recovery.</div>
-                </div>
-                <div class="input-group">
-                    <label for="reg-password">
-                        <span class="input-icon">PWD</span> Password
-                    </label>
-                    <div class="input-field-wrap">
-                        <input type="password" id="reg-password" placeholder="Choose a password...">
-                        <button class="input-eye-btn" type="button" data-toggle-password="reg-password" aria-label="Show password">Show</button>
-                    </div>
-                    <div class="auth-strength-meter" id="reg-password-strength" aria-hidden="true">
-                        <span class="auth-strength-fill"></span>
-                    </div>
-                    <div class="auth-field-note" id="reg-password-note">Use at least 4 characters for secure access.</div>
-                </div>
-                <div class="input-group">
-                    <label for="reg-confirm">
-                        <span class="input-icon">OK</span> Confirm Password
-                    </label>
-                    <div class="input-field-wrap">
-                        <input type="password" id="reg-confirm" placeholder="Repeat your password...">
-                        <button class="input-eye-btn" type="button" data-toggle-password="reg-confirm" aria-label="Show password">Show</button>
-                    </div>
-                    <div class="auth-field-note" id="reg-confirm-note"></div>
-                </div>
-                <div class="auth-error" id="register-error"></div>
-                <button class="btn btn-primary" id="register-btn">
-                    <span class="btn-text" id="register-btn-text">NEW Begin Your Journey</span>
-                    <span class="btn-glow"></span>
-                </button>
-                <p class="auth-switch">Already an adventurer? <a href="#" id="show-login"><- Log in</a></p>
-            </div>
+            <!-- Right panel: Centered Card -->
+            <div class="auth-card">
 
-            <!-- Footer -->
-            <div class="auth-footer">
-                <span>TOP Leaderboard</span>
-                <span>ATK 5 Levels</span>
-                <span>KILL 25 Stages</span>
+                <!-- Logo -->
+                <div class="auth-card-logo">
+                    <div class="auth-logo-icon">ATK</div>
+                    <div class="auth-logo-text">
+                        <span class="logo-shadow">SHADOW</span>
+                        <span class="logo-depths">DEPTHS</span>
+                    </div>
+                    <p class="auth-tagline">Descend into darkness. Rise as a legend.</p>
+                    <div class="auth-welcome-block">
+                        <span class="auth-welcome-kicker" id="auth-greeting">Welcome, adventurer.</span>
+                        <p class="auth-motd" id="auth-motd">Sign in to continue your run, challenge friends, and collect rare relics.</p>
+                    </div>
+                    <div class="auth-benefits" aria-hidden="true">
+                        <span class="auth-benefit-pill">Quick Login</span>
+                        <span class="auth-benefit-pill">Saved Progress</span>
+                        <span class="auth-benefit-pill">Co-op Ready</span>
+                    </div>
+                </div>
+
+                <!-- Tab switcher -->
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tab-login">Sign In</button>
+                    <button class="auth-tab" id="tab-register">Register</button>
+                    <div class="auth-tab-indicator" id="auth-tab-indicator"></div>
+                </div>
+
+                <!-- Login Form -->
+                <div id="login-form" class="auth-form">
+                    <div class="input-group">
+                        <label for="login-username">
+                            <span class="input-icon">USR</span> Username or Email
+                        </label>
+                        <input type="text" id="login-username" placeholder="Enter username or email..." autocomplete="username">
+                    </div>
+                    <div class="input-group">
+                        <label for="login-password">
+                            <span class="input-icon">PWD</span> Password
+                        </label>
+                        <div class="input-field-wrap">
+                            <input type="password" id="login-password" placeholder="Enter your password...">
+                            <button class="input-eye-btn" type="button" data-toggle-password="login-password" aria-label="Show password">Show</button>
+                        </div>
+                    </div>
+                    <div class="auth-inline-links">
+                        <a href="#" id="show-forgot-password">Forgot password?</a>
+                    </div>
+                    <div class="auth-error" id="login-error"></div>
+                    <button class="btn btn-primary" id="login-btn">
+                        <span class="btn-text" id="login-btn-text">ATK Enter the Depths</span>
+                        <span class="btn-glow"></span>
+                    </button>
+                    <div class="auth-social-block">
+                        <div class="google-rendered-button" id="google-login-rendered" aria-label="Sign in with Google"></div>
+                        <button class="btn btn-secondary auth-google-btn hidden" id="google-login-btn" type="button">Sign in with Google</button>
+                        <div class="auth-field-note" id="google-login-note">Use your Google account for quick login.</div>
+                        <div class="google-clientid-setup hidden" id="google-clientid-setup">
+                            <label for="google-clientid-input" class="google-clientid-label">Google Client ID</label>
+                            <div class="google-clientid-row">
+                                <input type="text" id="google-clientid-input" placeholder="Paste *.apps.googleusercontent.com" autocomplete="off">
+                                <button class="btn btn-secondary google-clientid-save" id="google-clientid-save-btn" type="button">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="auth-switch">No account yet? <a href="#" id="show-register">Create one -></a></p>
+                </div>
+
+                <!-- Register Form -->
+                <div id="register-form" class="auth-form hidden">
+                    <div class="input-group">
+                        <label for="reg-username">
+                            <span class="input-icon">USR</span> Username
+                        </label>
+                        <input type="text" id="reg-username" placeholder="Choose your name..." autocomplete="off">
+                        <div class="auth-field-note" id="reg-username-note">2-16 characters. Keep it easy to remember.</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-email">
+                            <span class="input-icon">MAIL</span> Email
+                        </label>
+                        <input type="email" id="reg-email" placeholder="you@gmail.com" autocomplete="email">
+                        <div class="auth-field-note" id="reg-email-note">Required for Google verification and password recovery.</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password">
+                            <span class="input-icon">PWD</span> Password
+                        </label>
+                        <div class="input-field-wrap">
+                            <input type="password" id="reg-password" placeholder="Choose a password...">
+                            <button class="input-eye-btn" type="button" data-toggle-password="reg-password" aria-label="Show password">Show</button>
+                        </div>
+                        <div class="auth-strength-meter" id="reg-password-strength" aria-hidden="true">
+                            <span class="auth-strength-fill"></span>
+                        </div>
+                        <div class="auth-field-note" id="reg-password-note">Use at least 4 characters for secure access.</div>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-confirm">
+                            <span class="input-icon">OK</span> Confirm Password
+                        </label>
+                        <div class="input-field-wrap">
+                            <input type="password" id="reg-confirm" placeholder="Repeat your password...">
+                            <button class="input-eye-btn" type="button" data-toggle-password="reg-confirm" aria-label="Show password">Show</button>
+                        </div>
+                        <div class="auth-field-note" id="reg-confirm-note"></div>
+                    </div>
+                    <div class="auth-error" id="register-error"></div>
+                    <button class="btn btn-primary" id="register-btn">
+                        <span class="btn-text" id="register-btn-text">NEW Begin Your Journey</span>
+                        <span class="btn-glow"></span>
+                    </button>
+                    <p class="auth-switch">Already an adventurer? <a href="#" id="show-login"><- Log in</a></p>
+                </div>
+
+                <!-- Footer -->
+                <div class="auth-footer">
+                    <span>TOP Leaderboard</span>
+                    <span>ATK 5 Levels</span>
+                    <span>KILL 25 Stages</span>
+                </div>
             </div>
         </div>
     </div>

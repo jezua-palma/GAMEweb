@@ -278,9 +278,14 @@ const Player = (() => {
         performDashNow() {
             if (!this.alive || this.dashCooldown > 0 || this.dashing) return false;
 
-            if (this.attackMode === 'ranged' && this.skillCooldown <= 0) {
-                this.triggerSkillShot();
-                this.skillCooldown = this.skillCooldownMax;
+            if (this.skillCooldown <= 0) {
+                if (this.attackMode === 'ranged') {
+                    this.triggerSkillShot();
+                    this.skillCooldown = this.skillCooldownMax;
+                } else if (this.attackMode === 'melee') {
+                    this.triggerMeleeSkill();
+                    this.skillCooldown = this.skillCooldownMax;
+                }
             }
 
             let dx = this.moveX;
@@ -421,6 +426,62 @@ const Player = (() => {
                 Particles.emitBurst(this.x, this.y, 8, '#c084fc', 2.6);
             }
             Audio.playSFX('levelup');
+        }
+
+        triggerMeleeSkill() {
+            if (this.attackMode !== 'melee' || !this.alive) return;
+
+            if (this.charDef.id === 'warrior') {
+                // Warrior: Cleave skill. Deals massive damage to all enemies in a 75px radius.
+                const damage = Math.ceil(this.getDamage() * 1.5);
+                let hitAny = false;
+                const enemies = (typeof Game !== 'undefined' && Game.enemies) ? Game.enemies : [];
+                const boss = (typeof Game !== 'undefined' && Game.boss) ? Game.boss : null;
+
+                for (const enemy of enemies) {
+                    if (!enemy.alive) continue;
+                    const dist = Utils.dist(this.x, this.y, enemy.x, enemy.y);
+                    if (dist <= 75 + enemy.size) {
+                        let skipLocalDamage = false;
+                        if (typeof window !== 'undefined' && typeof window.__shadowCoopBeforeHit === 'function') {
+                            skipLocalDamage = !!window.__shadowCoopBeforeHit(enemy, damage);
+                        }
+                        if (!skipLocalDamage) {
+                            enemy.takeDamage(damage, this.x, this.y);
+                        }
+                        if (typeof window !== 'undefined' && typeof window.__shadowCoopReportHit === 'function') {
+                            window.__shadowCoopReportHit(enemy, damage);
+                        }
+                        hitAny = true;
+                    }
+                }
+
+                if (boss && boss.alive) {
+                    const dist = Utils.dist(this.x, this.y, boss.x, boss.y);
+                    if (dist <= 75 + boss.size) {
+                        let skipLocalDamage = false;
+                        if (typeof window !== 'undefined' && typeof window.__shadowCoopBeforeHit === 'function') {
+                            skipLocalDamage = !!window.__shadowCoopBeforeHit(boss, damage);
+                        }
+                        if (!skipLocalDamage) {
+                            boss.takeDamage(damage, this.x, this.y);
+                        }
+                        if (typeof window !== 'undefined' && typeof window.__shadowCoopReportHit === 'function') {
+                            window.__shadowCoopReportHit(boss, damage);
+                        }
+                        hitAny = true;
+                    }
+                }
+
+                Particles.emitBurst(this.x, this.y, 16, '#ef4444', 3.2);
+                Audio.playSFX('slash');
+            } else if (this.charDef.id === 'paladin') {
+                // Paladin: Holy Bastion. Heals 1 HP and shields against next 2 hits.
+                this.heal(1);
+                this.shieldHits = (this.shieldHits || 0) + 2;
+                Particles.emitBurst(this.x, this.y, 15, '#fbbf24', 3.0);
+                Audio.playSFX('levelup');
+            }
         }
 
         updateProjectiles(dt, dungeon) {
