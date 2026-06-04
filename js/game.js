@@ -1238,6 +1238,11 @@ const Game = (() => {
                 e.preventDefault();
             }
             if (e.code === 'Space' && !paused) { if (player) player.dash(); e.preventDefault(); }
+            const skillKey = settings.skillKey || 'KeyQ';
+            if (e.code === skillKey && skillKey !== 'Space' && !paused) {
+                if (player) player.useSkill();
+                e.preventDefault();
+            }
             if (e.code === 'KeyE' && !paused) {
                 if (player) {
                     const interacted = tryInteract();
@@ -2574,6 +2579,7 @@ const Game = (() => {
         const storyToggle = document.getElementById('story-toggle');
         const fpsCapSelect = document.getElementById('fps-cap-select');
         const renderScaleSelect = document.getElementById('render-scale-select');
+        const skillKeySelect = document.getElementById('skill-key-select');
 
         if (sfxToggle) sfxToggle.checked = settings.sfx;
         if (musicToggle) musicToggle.checked = settings.music;
@@ -2584,6 +2590,7 @@ const Game = (() => {
         if (storyToggle) storyToggle.checked = settings.storyDialogues !== false;
         if (fpsCapSelect) fpsCapSelect.value = String(settings.fpsCap);
         if (renderScaleSelect) renderScaleSelect.value = String(settings.renderScale);
+        if (skillKeySelect) skillKeySelect.value = settings.skillKey || 'KeyQ';
 
         const minimap = document.getElementById('hud-minimap');
         if (minimap) minimap.style.display = settings.minimap ? 'block' : 'none';
@@ -2618,6 +2625,7 @@ const Game = (() => {
         settings.particles = !!settings.particles;
         settings.performanceMode = !!settings.performanceMode;
         settings.storyDialogues = settings.storyDialogues !== false;
+        settings.skillKey = settings.skillKey || 'KeyQ';
 
         const fps = Number(settings.fpsCap);
         settings.fpsCap = Number.isFinite(fps) && fps >= 0 ? Math.round(fps) : 60;

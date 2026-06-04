@@ -278,7 +278,8 @@ const Player = (() => {
         performDashNow() {
             if (!this.alive || this.dashCooldown > 0 || this.dashing) return false;
 
-            if (this.skillCooldown <= 0) {
+            const skillKey = (typeof Game !== 'undefined' && Game.settings) ? Game.settings.skillKey : 'Space';
+            if (skillKey === 'Space' && this.skillCooldown <= 0) {
                 if (this.attackMode === 'ranged') {
                     this.triggerSkillShot();
                     this.skillCooldown = this.skillCooldownMax;
@@ -353,6 +354,20 @@ const Player = (() => {
                 return false;
             }
             return this.performDashNow();
+        }
+
+        useSkill() {
+            if (!this.alive || this.skillCooldown > 0) return false;
+            if (this.attackMode === 'ranged') {
+                this.triggerSkillShot();
+                this.skillCooldown = this.skillCooldownMax;
+                return true;
+            } else if (this.attackMode === 'melee') {
+                this.triggerMeleeSkill();
+                this.skillCooldown = this.skillCooldownMax;
+                return true;
+            }
+            return false;
         }
 
         attack(targets = null) {

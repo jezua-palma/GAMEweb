@@ -1551,6 +1551,13 @@
             const scale = Number(e.target.value);
             Game.updateSetting('renderScale', Number.isFinite(scale) ? scale : 1);
         });
+
+        const skillKeySelect = document.getElementById('skill-key-select');
+        if (skillKeySelect) {
+            skillKeySelect.addEventListener('change', (e) => {
+                Game.updateSetting('skillKey', e.target.value);
+            });
+        }
     }
 
     // ===== CHARACTER SELECT =====
