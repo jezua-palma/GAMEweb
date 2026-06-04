@@ -535,6 +535,9 @@ const Enemies = (() => {
             this.knockbackY = Math.sin(angle) * knockbackForce;
 
             Particles.emitBurst(this.x, this.y, this.isElite ? 8 : 6, this.def.color, 2.2);
+            if (typeof Particles !== 'undefined' && Particles.emitText) {
+                Particles.emitText(this.x, this.y - 18, `-${amount}`, this.isElite ? '#f59e0b' : '#ef4444');
+            }
 
             if (this.hp <= 0) {
                 this.alive = false;

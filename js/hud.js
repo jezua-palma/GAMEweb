@@ -85,6 +85,15 @@ const HUD = (() => {
 
         const skillFill = document.getElementById('skill-cooldown-fill');
         const skillLabel = document.getElementById('skill-label');
+        const skillKeyBadge = document.getElementById('hud-skill-key');
+        if (skillKeyBadge) {
+            const rawKey = (typeof Game !== 'undefined' && Game.settings) ? Game.settings.skillKey : 'KeyQ';
+            let keyDisplay = 'Q';
+            if (rawKey === 'ShiftLeft') keyDisplay = 'LSHIFT';
+            else if (rawKey === 'Space') keyDisplay = 'SPACE';
+            skillKeyBadge.textContent = keyDisplay;
+        }
+
         if (skillFill && skillLabel) {
             const maxCd = Math.max(0.1, Number(player.skillCooldownMax) || 5);
             const currentCd = Math.max(0, Number(player.skillCooldown) || 0);

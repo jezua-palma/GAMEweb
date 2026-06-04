@@ -3221,6 +3221,24 @@ input:checked + .toggle-slider::before {
     font-size: 1.2rem;
 }
 
+.key-badge {
+    font-family: var(--font-game);
+    font-size: 0.45rem;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hud-label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
 .hud-dash {
     background: rgba(0, 0, 0, 0.5);
     padding: 8px 14px;

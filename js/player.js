@@ -532,6 +532,9 @@ const Player = (() => {
                 this.shieldHits -= 1;
                 this.invincible = 0.5;
                 Particles.emitBurst(this.x, this.y, 8, '#7c3aed', 3);
+                if (typeof Particles !== 'undefined' && Particles.emitText) {
+                    Particles.emitText(this.x, this.y - 20, 'BLOCKED', '#a78bfa');
+                }
                 Audio.playSFX('pickup');
                 return true;
             }
@@ -555,6 +558,9 @@ const Player = (() => {
             this.invincible = 1.0;
             Audio.playSFX('hit');
             Particles.emitBurst(this.x, this.y, 10, '#ef4444', 3);
+            if (typeof Particles !== 'undefined' && Particles.emitText) {
+                Particles.emitText(this.x, this.y - 20, `-${finalDmg} HP`, '#fca5a5');
+            }
             if (this.hp <= 0) {
                 this.hp = 0;
                 this.alive = false;

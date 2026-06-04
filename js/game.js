@@ -2494,6 +2494,44 @@ const Game = (() => {
             ctx.fillStyle = 'rgba(0,0,0,0.65)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
+
+        // Draw custom targeting crosshair if mouse/keyboard are active
+        const touchControls = document.getElementById('touch-controls');
+        const hasTouch = touchControls && !touchControls.classList.contains('hidden');
+        if (!hasTouch && player && player.alive) {
+            const cx = window.innerWidth / 2 + mouseX;
+            const cy = window.innerHeight / 2 + mouseY;
+            const themeColor = player.charDef ? player.charDef.color : '#06b6d4';
+            
+            ctx.save();
+            ctx.strokeStyle = themeColor;
+            ctx.shadowColor = themeColor;
+            ctx.shadowBlur = 8;
+            ctx.lineWidth = 1.8;
+            
+            // Draw central aiming circle
+            ctx.beginPath();
+            ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+            ctx.stroke();
+            
+            // Draw targeting ticks
+            const ticks = 4;
+            const length = 5;
+            const offset = 9;
+            for (let i = 0; i < ticks; i++) {
+                const angle = (Math.PI / 2) * i;
+                const sx = cx + Math.cos(angle) * offset;
+                const sy = cy + Math.sin(angle) * offset;
+                const ex = cx + Math.cos(angle) * (offset + length);
+                const ey = cy + Math.sin(angle) * (offset + length);
+                
+                ctx.beginPath();
+                ctx.moveTo(sx, sy);
+                ctx.lineTo(ex, ey);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
     }
 
     function quitToMenu() {
