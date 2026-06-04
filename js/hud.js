@@ -78,10 +78,24 @@ const HUD = (() => {
         }
 
         const itemIcon = document.getElementById('hud-item-icon');
-        itemIcon.textContent = player.heldItem ? player.heldItem.icon : '--';
+        if (itemIcon) {
+            itemIcon.textContent = player.heldItem ? player.heldItem.icon : '--';
+        }
 
-        document.getElementById('dash-cooldown-fill').style.width =
-            `${player.getDashCooldownPercent() * 100}%`;
+        const weaponIconEl = document.getElementById('hud-weapon-icon');
+        const weaponNameEl = document.getElementById('hud-weapon-name');
+        if (weaponIconEl && weaponNameEl && player.charDef && player.charDef.weaponTiers) {
+            const activeWeapon = player.charDef.weaponTiers[player.weaponTier || 0];
+            if (activeWeapon) {
+                weaponIconEl.textContent = activeWeapon.icon || '⚔️';
+                weaponNameEl.textContent = activeWeapon.name || 'Unknown';
+            }
+        }
+
+        const dashFill = document.getElementById('dash-cooldown-fill');
+        if (dashFill) {
+            dashFill.style.width = `${player.getDashCooldownPercent() * 100}%`;
+        }
 
         const skillFill = document.getElementById('skill-cooldown-fill');
         const skillLabel = document.getElementById('skill-label');

@@ -819,20 +819,89 @@ const Player = (() => {
             ctx.arc(handX, handY, 1.8, 0, Math.PI * 2);
             ctx.fill();
 
-            // Weapon (large sword)
+            // Weapon (Class-Specific Fallbacks)
+            const classId = this.charDef ? this.charDef.id : 'warrior';
             const weaponLen = this.attackRange * 0.42;
-            ctx.strokeStyle = '#9ca3af';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(handX, handY);
-            ctx.lineTo(handX + Math.cos(facing - (this.attacking ? 0.6 : -0.1)) * weaponLen, handY + Math.sin(facing - (this.attacking ? 0.6 : -0.1)) * weaponLen);
-            ctx.stroke();
-            ctx.strokeStyle = '#e5e7eb';
-            ctx.lineWidth = 1.3;
-            ctx.beginPath();
-            ctx.moveTo(handX + Math.cos(facing) * 2, handY + Math.sin(facing) * 2);
-            ctx.lineTo(handX + Math.cos(facing - (this.attacking ? 0.6 : -0.1)) * (weaponLen - 2), handY + Math.sin(facing - (this.attacking ? 0.6 : -0.1)) * (weaponLen - 2));
-            ctx.stroke();
+
+            if (classId === 'mage') {
+                // Mage staff
+                ctx.strokeStyle = '#78350f';
+                ctx.lineWidth = 2.0;
+                ctx.beginPath();
+                ctx.moveTo(handX, handY);
+                ctx.lineTo(handX + cos * 15, handY + sin * 15);
+                ctx.stroke();
+
+                // Crystal tip
+                ctx.fillStyle = '#67e8f9';
+                ctx.shadowColor = '#67e8f9';
+                ctx.shadowBlur = 6;
+                ctx.beginPath();
+                ctx.arc(handX + cos * 15, handY + sin * 15, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+            } else if (classId === 'rogue') {
+                // Rogue dual daggers
+                ctx.strokeStyle = '#cbd5e1';
+                ctx.lineWidth = 1.8;
+                ctx.lineCap = 'round';
+                
+                // Right hand dagger
+                ctx.beginPath();
+                ctx.moveTo(handX, handY);
+                ctx.lineTo(handX + Math.cos(facing - (this.attacking ? 0.6 : -0.1)) * 9, handY + Math.sin(facing - (this.attacking ? 0.6 : -0.1)) * 9);
+                ctx.stroke();
+
+                // Left hand dagger
+                const lhX = sx - 12 + Math.cos(facing + Math.PI * 0.7) * 3;
+                const lhY = shoulderY + 7 + Math.sin(facing + Math.PI * 0.7) * 3;
+                ctx.beginPath();
+                ctx.moveTo(lhX, lhY);
+                ctx.lineTo(lhX + Math.cos(facing + 1.2) * 9, lhY + Math.sin(facing + 1.2) * 9);
+                ctx.stroke();
+
+            } else if (classId === 'paladin') {
+                // Paladin mace and left arm shield
+                ctx.strokeStyle = '#b45309';
+                ctx.lineWidth = 2.0;
+                ctx.beginPath();
+                ctx.moveTo(handX, handY);
+                ctx.lineTo(handX + cos * 12, handY + sin * 12);
+                ctx.stroke();
+
+                // Mace head
+                ctx.fillStyle = '#cbd5e1';
+                ctx.beginPath();
+                ctx.arc(handX + cos * 12, handY + sin * 12, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Buckler Shield (Left Arm)
+                const lhX = sx - 12 + Math.cos(facing + Math.PI * 0.7) * 3;
+                const lhY = shoulderY + 7 + Math.sin(facing + Math.PI * 0.7) * 3;
+                ctx.fillStyle = '#f59e0b';
+                ctx.strokeStyle = '#b45309';
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.arc(lhX, lhY, 5.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+            } else {
+                // Warrior / Default sword
+                ctx.strokeStyle = '#9ca3af';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(handX, handY);
+                ctx.lineTo(handX + Math.cos(facing - (this.attacking ? 0.6 : -0.1)) * weaponLen, handY + Math.sin(facing - (this.attacking ? 0.6 : -0.1)) * weaponLen);
+                ctx.stroke();
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.lineWidth = 1.3;
+                ctx.beginPath();
+                ctx.moveTo(handX + Math.cos(facing) * 2, handY + Math.sin(facing) * 2);
+                ctx.lineTo(handX + Math.cos(facing - (this.attacking ? 0.6 : -0.1)) * (weaponLen - 2), handY + Math.sin(facing - (this.attacking ? 0.6 : -0.1)) * (weaponLen - 2));
+                ctx.stroke();
+            }
 
             // Head (oversized helmet)
             const headX = sx + cos * 1.5;

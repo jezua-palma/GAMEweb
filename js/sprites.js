@@ -218,58 +218,166 @@ const SpriteAssets = (() => {
         }
         ctx.fill();
 
-        // === WEAPON (large sword) ===
-        const weaponCol = palette.weapon || '#d1d5db';
-        if (isAttack) {
-            // Sword swinging up/forward
-            const swordStartX = cx + bodyW * 0.5 + 6;
-            const swordStartY = armY - 2;
+        // === WEAPON (Class-Specific Drawings) ===
+        const rx = isAttack ? cx + bodyW * 0.5 + 6 : cx + bodyW * 0.5 + 4;
+        const ry = isAttack ? armY - 2 : armY + 5 - walk * 0.3;
+
+        const lx = isAttack ? cx - bodyW * 0.5 - 4 : cx - bodyW * 0.5 - 3;
+        const ly = isAttack ? armY + 6 : armY + 6 + walk * 0.3;
+
+        const classId = palette.classId || 'warrior';
+
+        if (classId === 'mage') {
+            // Mage staff: wooden shaft with a glowing crystal tip
+            ctx.strokeStyle = '#78350f';
+            ctx.lineWidth = 2.0;
+            ctx.beginPath();
+            ctx.moveTo(rx, ry);
+            if (isAttack) {
+                ctx.lineTo(rx + 9, ry - 11);
+            } else {
+                ctx.lineTo(rx + 4, ry + 11);
+            }
+            ctx.stroke();
+
+            // Crystal tip
+            const tx = isAttack ? rx + 9 : rx + 4;
+            const ty = isAttack ? ry - 11 : ry + 11;
+            ctx.fillStyle = '#22d3ee';
+            ctx.shadowColor = '#22d3ee';
+            ctx.shadowBlur = 6;
+            ctx.beginPath();
+            ctx.arc(tx, ty, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+        } else if (classId === 'rogue') {
+            // Rogue dual-wielding daggers
             ctx.strokeStyle = '#9ca3af';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 1.8;
             ctx.lineCap = 'round';
+            // Right Hand Dagger
             ctx.beginPath();
-            ctx.moveTo(swordStartX, swordStartY);
-            ctx.lineTo(swordStartX + 10, swordStartY - 12);
+            ctx.moveTo(rx, ry);
+            if (isAttack) {
+                ctx.lineTo(rx + 6, ry - 6);
+            } else {
+                ctx.lineTo(rx + 2, ry + 6);
+            }
             ctx.stroke();
-            // Blade highlight
-            ctx.strokeStyle = '#e5e7eb';
-            ctx.lineWidth = 1.5;
+
+            // Left Hand Dagger
             ctx.beginPath();
-            ctx.moveTo(swordStartX + 1, swordStartY - 1);
-            ctx.lineTo(swordStartX + 9, swordStartY - 11);
+            ctx.moveTo(lx, ly);
+            ctx.lineTo(lx - 2, ly + 6);
             ctx.stroke();
-            // Crossguard
-            ctx.strokeStyle = accentCol;
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(swordStartX - 2, swordStartY + 1);
-            ctx.lineTo(swordStartX + 3, swordStartY - 2);
-            ctx.stroke();
-        } else {
-            // Sword at rest pointing down-forward
-            const swordStartX = cx + bodyW * 0.5 + 4;
-            const swordStartY = armY + 5 - walk * 0.3;
-            ctx.strokeStyle = '#9ca3af';
-            ctx.lineWidth = 2.8;
-            ctx.lineCap = 'round';
-            ctx.beginPath();
-            ctx.moveTo(swordStartX, swordStartY);
-            ctx.lineTo(swordStartX + 4, swordStartY + 11);
-            ctx.stroke();
-            // Blade highlight
-            ctx.strokeStyle = '#e5e7eb';
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.moveTo(swordStartX + 0.5, swordStartY + 1);
-            ctx.lineTo(swordStartX + 3.5, swordStartY + 10);
-            ctx.stroke();
-            // Crossguard
-            ctx.strokeStyle = accentCol;
+
+        } else if (classId === 'paladin') {
+            // Paladin mace and left hand buckler shield
+            ctx.strokeStyle = '#92400e';
             ctx.lineWidth = 1.8;
             ctx.beginPath();
-            ctx.moveTo(swordStartX - 2.5, swordStartY + 1);
-            ctx.lineTo(swordStartX + 2.5, swordStartY - 1);
+            ctx.moveTo(rx, ry);
+            if (isAttack) {
+                ctx.lineTo(rx + 8, ry - 9);
+            } else {
+                ctx.lineTo(rx + 3, ry + 9);
+            }
             ctx.stroke();
+
+            // Mace head
+            const mx = isAttack ? rx + 8 : rx + 3;
+            const my = isAttack ? ry - 9 : ry + 9;
+            ctx.fillStyle = '#9ca3af';
+            ctx.beginPath();
+            ctx.arc(mx, my, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Buckler Shield (Left Arm)
+            ctx.fillStyle = '#f59e0b';
+            ctx.strokeStyle = '#92400e';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(lx, ly, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+        } else if (classId === 'archer') {
+            // Archer bow
+            ctx.strokeStyle = '#92400e';
+            ctx.lineWidth = 2.0;
+            ctx.beginPath();
+            if (isAttack) {
+                ctx.arc(rx + 3, ry - 3, 7, -Math.PI * 0.3, Math.PI * 0.7);
+            } else {
+                ctx.arc(rx + 2, ry + 2, 7, Math.PI * 0.2, Math.PI * 1.2);
+            }
+            ctx.stroke();
+
+            // Bowstring
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            if (isAttack) {
+                ctx.moveTo(rx - 1, ry - 9);
+                ctx.lineTo(rx - 2, ry + 2);
+            } else {
+                ctx.moveTo(rx - 2, ry - 3);
+                ctx.lineTo(rx + 7, ry + 7);
+            }
+            ctx.stroke();
+
+        } else {
+            // Warrior / Default broadsword
+            if (isAttack) {
+                ctx.strokeStyle = '#9ca3af';
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(rx, ry);
+                ctx.lineTo(rx + 10, ry - 12);
+                ctx.stroke();
+
+                // Blade highlight
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(rx + 1, ry - 1);
+                ctx.lineTo(rx + 9, ry - 11);
+                ctx.stroke();
+
+                // Crossguard
+                ctx.strokeStyle = accentCol;
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(rx - 2, ry + 1);
+                ctx.lineTo(rx + 3, ry - 2);
+                ctx.stroke();
+            } else {
+                ctx.strokeStyle = '#9ca3af';
+                ctx.lineWidth = 2.8;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(rx, ry);
+                ctx.lineTo(rx + 4, ry + 11);
+                ctx.stroke();
+
+                // Blade highlight
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.moveTo(rx + 0.5, ry + 1);
+                ctx.lineTo(rx + 3.5, ry + 10);
+                ctx.stroke();
+
+                // Crossguard
+                ctx.strokeStyle = accentCol;
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.moveTo(rx - 2.5, ry + 1);
+                ctx.lineTo(rx + 2.5, ry - 1);
+                ctx.stroke();
+            }
         }
 
         // === HEAD (oversized helmet) ===
@@ -532,6 +640,7 @@ const SpriteAssets = (() => {
     function ensureGeneratedSheets() {
         if (!sheetMap.has('player_adventurer')) {
             const generic = buildHumanoidSheet({
+                classId: 'warrior',
                 main: '#4f8cdf',
                 dark: '#2f4977',
                 skin: '#e3be95',
@@ -550,18 +659,22 @@ const SpriteAssets = (() => {
 
         const playerPalettes = {
             player_warrior: {
+                classId: 'warrior',
                 main: '#ef4444', dark: '#7f1d1d', skin: '#deb085', weapon: '#e5e7eb',
                 cape: '#7f1d1d', capeEdge: '#5c0e0e', gem: '#fbbf24', hornEdge: '#b91c1c',
             },
             player_rogue: {
+                classId: 'rogue',
                 main: '#a855f7', dark: '#581c87', skin: '#cfa27c', weapon: '#d8b4fe',
                 cape: '#3b0764', capeEdge: '#2e0452', gem: '#c084fc', hornEdge: '#7c3aed',
             },
             player_mage: {
+                classId: 'mage',
                 main: '#06b6d4', dark: '#0e7490', skin: '#e7c19a', weapon: '#67e8f9',
                 cape: '#164e63', capeEdge: '#0c3547', gem: '#22d3ee', hornEdge: '#0891b2',
             },
             player_paladin: {
+                classId: 'paladin',
                 main: '#f59e0b', dark: '#92400e', skin: '#d8ae86', weapon: '#fde68a',
                 cape: '#7f1d1d', capeEdge: '#5c0e0e', gem: '#ef4444', hornEdge: '#b8860b',
             },
@@ -578,6 +691,7 @@ const SpriteAssets = (() => {
 
         if (!sheetMap.has('enemy_humanoid')) {
             const sh = buildHumanoidSheet({
+                classId: 'warrior',
                 main: '#64748b',
                 dark: '#334155',
                 skin: '#d8bd9e',
@@ -593,14 +707,17 @@ const SpriteAssets = (() => {
 
         const enemyVariants = {
             enemy_skeleton: {
+                classId: 'skeleton',
                 main: '#d4d4d8', dark: '#71717a', skin: '#f4f4f5', weapon: '#f1f5f9',
                 cape: '#52525b', capeEdge: '#3f3f46', gem: '#a1a1aa', hornEdge: '#a1a1aa',
             },
             enemy_archer: {
+                classId: 'archer',
                 main: '#f97316', dark: '#9a3412', skin: '#d2aa83', weapon: '#fdba74',
                 cape: '#7c2d12', capeEdge: '#5c1d0e', gem: '#fb923c', hornEdge: '#c2410c',
             },
             enemy_mage: {
+                classId: 'mage',
                 main: '#06b6d4', dark: '#155e75', skin: '#ebc3a0', weapon: '#67e8f9',
                 cape: '#164e63', capeEdge: '#0c3547', gem: '#22d3ee', hornEdge: '#0891b2',
             },

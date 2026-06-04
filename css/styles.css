@@ -3221,6 +3221,28 @@ input:checked + .toggle-slider::before {
     font-size: 1.2rem;
 }
 
+.hud-weapon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 14px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weapon-icon {
+    font-size: 1.2rem;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+}
+
+.weapon-name {
+    font-family: var(--font-game);
+    font-size: 0.42rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+}
+
 .key-badge {
     font-family: var(--font-game);
     font-size: 0.45rem;
