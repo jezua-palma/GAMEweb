@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="shadow-google-client-id" content="818804477360-rlcboqf98fuiecvelshrg194n4a0tq53.apps.googleusercontent.com">
+    <meta name="description" content="Shadow Depths - A 2D roguelike forest adventure game. Explore procedurally generated wilds, fight enemies, and climb the leaderboard!">
+    <title>Shadow Depths - Forest Adventure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=20260504d">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- ===== LOADING SCREEN ===== -->
+    <div id="loading-screen" class="screen active">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <span class="logo-shadow">SHADOW</span>
+                <span class="logo-depths">DEPTHS</span>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loading-bar"></div>
+            </div>
+            <p class="loading-text" id="loading-text">Initializing...</p>
+        </div>
+        <div class="particles" id="loading-particles"></div>
+    </div>
+
+    <!-- ===== AUTH SCREEN ===== -->
+    <div id="auth-screen" class="screen">
+
+        <!-- Animated background -->
+        <div class="auth-bg">
+            <div class="auth-bg-orb auth-bg-orb-1"></div>
+            <div class="auth-bg-orb auth-bg-orb-2"></div>
+            <div class="auth-bg-orb auth-bg-orb-3"></div>
+            <div class="auth-particles" id="auth-particles"></div>
+        </div>
+
+        <!-- Centered card -->
+        <div class="auth-card">
+
+            <!-- Logo -->
+            <div class="auth-card-logo">
+                <div class="auth-logo-icon">ATK</div>
+                <div class="auth-logo-text">
+                    <span class="logo-shadow">SHADOW</span>
+                    <span class="logo-depths">DEPTHS</span>
+                </div>
+                <p class="auth-tagline">Descend into darkness. Rise as a legend.</p>
+                <div class="auth-welcome-block">
+                    <span class="auth-welcome-kicker" id="auth-greeting">Welcome, adventurer.</span>
+                    <p class="auth-motd" id="auth-motd">Sign in to continue your run, challenge friends, and collect rare relics.</p>
+                </div>
+                <div class="auth-benefits" aria-hidden="true">
+                    <span class="auth-benefit-pill">Quick Login</span>
+                    <span class="auth-benefit-pill">Saved Progress</span>
+                    <span class="auth-benefit-pill">Co-op Ready</span>
+                </div>
+            </div>
+
+            <!-- Tab switcher -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tab-login">Sign In</button>
+                <button class="auth-tab" id="tab-register">Register</button>
+                <div class="auth-tab-indicator" id="auth-tab-indicator"></div>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form" class="auth-form">
+                <div class="input-group">
+                    <label for="login-username">
+                        <span class="input-icon">USR</span> Username or Email
+                    </label>
+                    <input type="text" id="login-username" placeholder="Enter username or email..." autocomplete="username">
+                </div>
+                <div class="input-group">
+                    <label for="login-password">
+                        <span class="input-icon">PWD</span> Password
+                    </label>
+                    <div class="input-field-wrap">
+                        <input type="password" id="login-password" placeholder="Enter your password...">
+                        <button class="input-eye-btn" type="button" data-toggle-password="login-password" aria-label="Show password">Show</button>
+                    </div>
+                </div>
+                <div class="auth-inline-links">
+                    <a href="#" id="show-forgot-password">Forgot password?</a>
+                </div>
+                <div class="auth-error" id="login-error"></div>
+                <button class="btn btn-primary" id="login-btn">
+                    <span class="btn-text" id="login-btn-text">ATK Enter the Depths</span>
+                    <span class="btn-glow"></span>
+                </button>
+                <div class="auth-social-block">
+                    <div class="google-rendered-button" id="google-login-rendered" aria-label="Sign in with Google"></div>
+                    <button class="btn btn-secondary auth-google-btn hidden" id="google-login-btn" type="button">Sign in with Google</button>
+                    <div class="auth-field-note" id="google-login-note">Use your Google account for quick login.</div>
+                    <div class="google-clientid-setup hidden" id="google-clientid-setup">
+                        <label for="google-clientid-input" class="google-clientid-label">Google Client ID</label>
+                        <div class="google-clientid-row">
+                            <input type="text" id="google-clientid-input" placeholder="Paste *.apps.googleusercontent.com" autocomplete="off">
+                            <button class="btn btn-secondary google-clientid-save" id="google-clientid-save-btn" type="button">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <p class="auth-switch">No account yet? <a href="#" id="show-register">Create one -></a></p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="auth-form hidden">
+                <div class="input-group">
+                    <label for="reg-username">
+                        <span class="input-icon">USR</span> Username
+                    </label>
+                    <input type="text" id="reg-username" placeholder="Choose your name..." autocomplete="off">
+                    <div class="auth-field-note" id="reg-username-note">2-16 characters. Keep it easy to remember.</div>
+                </div>
+                <div class="input-group">
+                    <label for="reg-email">
+                        <span class="input-icon">MAIL</span> Email
+                    </label>
+                    <input type="email" id="reg-email" placeholder="you@gmail.com" autocomplete="email">
+                    <div class="auth-field-note" id="reg-email-note">Required for Google verification and password recovery.</div>
+                </div>
+                <div class="input-group">
+                    <label for="reg-password">
+                        <span class="input-icon">PWD</span> Password
+                    </label>
+                    <div class="input-field-wrap">
+                        <input type="password" id="reg-password" placeholder="Choose a password...">
+                        <button class="input-eye-btn" type="button" data-toggle-password="reg-password" aria-label="Show password">Show</button>
+                    </div>
+                    <div class="auth-strength-meter" id="reg-password-strength" aria-hidden="true">
+                        <span class="auth-strength-fill"></span>
+                    </div>
+                    <div class="auth-field-note" id="reg-password-note">Use at least 4 characters for secure access.</div>
+                </div>
+                <div class="input-group">
+                    <label for="reg-confirm">
+                        <span class="input-icon">OK</span> Confirm Password
+                    </label>
+                    <div class="input-field-wrap">
+                        <input type="password" id="reg-confirm" placeholder="Repeat your password...">
+                        <button class="input-eye-btn" type="button" data-toggle-password="reg-confirm" aria-label="Show password">Show</button>
+                    </div>
+                    <div class="auth-field-note" id="reg-confirm-note"></div>
+                </div>
+                <div class="auth-error" id="register-error"></div>
+                <button class="btn btn-primary" id="register-btn">
+                    <span class="btn-text" id="register-btn-text">NEW Begin Your Journey</span>
+                    <span class="btn-glow"></span>
+                </button>
+                <p class="auth-switch">Already an adventurer? <a href="#" id="show-login"><- Log in</a></p>
+            </div>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <span>TOP Leaderboard</span>
+                <span>ATK 5 Levels</span>
+                <span>KILL 25 Stages</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FORGOT PASSWORD MODAL ===== -->
+    <div id="forgot-overlay" class="auth-modal-overlay hidden">
+        <div class="auth-modal-card glass-panel">
+            <div class="auth-modal-head">
+                <h2 class="auth-modal-title">Recover Account</h2>
+                <p class="auth-modal-sub">Verify using your Google account email before resetting password.</p>
+            </div>
+
+            <div class="input-group">
+                <label for="forgot-identifier">
+                    <span class="input-icon">USR</span> Username or Email
+                </label>
+                <input type="text" id="forgot-identifier" placeholder="Enter username or email..." autocomplete="username">
+            </div>
+
+            <div class="auth-social-block">
+                <div class="google-rendered-button" id="forgot-google-rendered" aria-label="Verify with Google"></div>
+                <button class="btn btn-secondary auth-google-btn hidden" id="forgot-google-verify-btn" type="button">Verify with Google</button>
+                <div class="auth-field-note" id="forgot-google-note">Google verification required.</div>
+            </div>
+
+            <div class="input-group">
+                <label for="forgot-new-password">
+                    <span class="input-icon">NEW</span> New Password
+                </label>
+                <div class="input-field-wrap">
+                    <input type="password" id="forgot-new-password" placeholder="Enter new password..." disabled>
+                    <button class="input-eye-btn" type="button" data-toggle-password="forgot-new-password" aria-label="Show password">Show</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="forgot-confirm-password">
+                    <span class="input-icon">OK</span> Confirm New Password
+                </label>
+                <div class="input-field-wrap">
+                    <input type="password" id="forgot-confirm-password" placeholder="Confirm new password..." disabled>
+                    <button class="input-eye-btn" type="button" data-toggle-password="forgot-confirm-password" aria-label="Show password">Show</button>
+                </div>
+            </div>
+
+            <div class="auth-error" id="forgot-error"></div>
+
+            <div class="auth-modal-actions">
+                <button class="btn btn-secondary" id="forgot-cancel-btn" type="button">Cancel</button>
+                <button class="btn btn-primary" id="forgot-submit-btn" type="button" disabled>Reset Password</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CHARACTER SELECT SCREEN ===== -->
+    <div id="charselect-screen" class="screen">
+        <div class="cs-bg">
+            <div class="cs-bg-orb cs-orb-1"></div>
+            <div class="cs-bg-orb cs-orb-2"></div>
+        </div>
+        <div class="cs-container">
+            <!-- Header -->
+            <div class="cs-header">
+                <h1 class="cs-title">Choose Your Hero</h1>
+                <p class="cs-subtitle">Select a class to begin your descent</p>
+            </div>
+
+            <!-- Character Cards -->
+            <div class="cs-cards" id="cs-cards">
+
+                <!-- Warrior -->
+                <div class="cs-card" data-char="warrior" tabindex="0">
+                    <div class="cs-card-glow"></div>
+                    <div class="cs-card-icon">W</div>
+                    <div class="cs-card-name">Warrior</div>
+                    <div class="cs-card-title">Berserker Fury</div>
+                    <div class="cs-card-desc">Devastating melee fighter. Highest damage but fragile. Kill fast or die trying.</div>
+                    <div class="cs-stat-bars">
+                        <div class="cs-stat"><span>HP</span><div class="cs-bar"><div class="cs-bar-fill" style="width:45%"></div></div></div>
+                        <div class="cs-stat"><span>SPD</span><div class="cs-bar"><div class="cs-bar-fill" style="width:75%"></div></div></div>
+                        <div class="cs-stat"><span>ATK</span><div class="cs-bar"><div class="cs-bar-fill" style="width:100%"></div></div></div>
+                    </div>
+                    <div class="cs-weapon">BLADE Iron Sword</div>
+                    <div class="cs-passive">FURY +15% DMG below half HP</div>
+                </div>
+
+                <!-- Rogue -->
+                <div class="cs-card" data-char="rogue" tabindex="0">
+                    <div class="cs-card-glow"></div>
+                    <div class="cs-card-icon">R</div>
+                    <div class="cs-card-name">Rogue</div>
+                    <div class="cs-card-title">Shadow Step</div>
+                    <div class="cs-card-desc">Swift as shadow. Fastest character with critical strike chance.</div>
+                    <div class="cs-stat-bars">
+                        <div class="cs-stat"><span>HP</span><div class="cs-bar"><div class="cs-bar-fill" style="width:55%"></div></div></div>
+                        <div class="cs-stat"><span>SPD</span><div class="cs-bar"><div class="cs-bar-fill" style="width:100%"></div></div></div>
+                        <div class="cs-stat"><span>ATK</span><div class="cs-bar"><div class="cs-bar-fill" style="width:55%"></div></div></div>
+                    </div>
+                    <div class="cs-weapon">DAG Dagger</div>
+                    <div class="cs-passive">CRIT 10% Critical Strike</div>
+                </div>
+
+                <!-- Mage -->
+                <div class="cs-card" data-char="mage" tabindex="0">
+                    <div class="cs-card-glow"></div>
+                    <div class="cs-card-icon">M</div>
+                    <div class="cs-card-name">Mage</div>
+                    <div class="cs-card-title">Arcane Mind</div>
+                    <div class="cs-card-desc">Devastating spells. Highest damage but lowest HP. +30% XP gain.</div>
+                    <div class="cs-stat-bars">
+                        <div class="cs-stat"><span>HP</span><div class="cs-bar"><div class="cs-bar-fill" style="width:35%"></div></div></div>
+                        <div class="cs-stat"><span>SPD</span><div class="cs-bar"><div class="cs-bar-fill" style="width:65%"></div></div></div>
+                        <div class="cs-stat"><span>ATK</span><div class="cs-bar"><div class="cs-bar-fill" style="width:100%"></div></div></div>
+                    </div>
+                    <div class="cs-weapon">STAFF Magic Staff</div>
+                    <div class="cs-passive">XP +30% XP Gain</div>
+                </div>
+
+                <!-- Paladin -->
+                <div class="cs-card" data-char="paladin" tabindex="0">
+                    <div class="cs-card-glow"></div>
+                    <div class="cs-card-icon">P</div>
+                    <div class="cs-card-name">Paladin</div>
+                    <div class="cs-card-title">Divine Guard</div>
+                    <div class="cs-card-desc">Unbreakable holy tank. Highest HP and armor with HP regeneration.</div>
+                    <div class="cs-stat-bars">
+                        <div class="cs-stat"><span>HP</span><div class="cs-bar"><div class="cs-bar-fill" style="width:100%"></div></div></div>
+                        <div class="cs-stat"><span>SPD</span><div class="cs-bar"><div class="cs-bar-fill" style="width:40%"></div></div></div>
+                        <div class="cs-stat"><span>ATK</span><div class="cs-bar"><div class="cs-bar-fill" style="width:42%"></div></div></div>
+                    </div>
+                    <div class="cs-weapon">MACE Holy Mace</div>
+                    <div class="cs-passive">REGEN HP Regen every 12s + 3 Armor</div>
+                </div>
+
+            </div>
+
+            <!-- Name input -->
+            <div class="cs-name-row">
+                <label class="cs-name-label">ATK Hero Name</label>
+                <input type="text" id="cs-name-input" class="cs-name-input" placeholder="Enter your hero's name..." maxlength="18" autocomplete="off">
+            </div>
+
+            <!-- Action buttons -->
+            <div class="cs-actions">
+                <button class="btn btn-secondary cs-back-btn" id="cs-back-btn"><- Back</button>
+                <button class="btn btn-primary cs-play-btn" id="cs-play-btn" disabled>
+                    <span class="btn-text">ATK Enter the Wilds</span>
+                    <span class="btn-glow"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== LEVEL UP MODAL ===== -->
+    <div id="levelup-overlay" class="levelup-overlay hidden">
+        <div class="levelup-modal">
+            <div class="levelup-header">
+                <div class="levelup-icon">UP</div>
+                <h2 class="levelup-title">LEVEL UP!</h2>
+                <p class="levelup-sub" id="levelup-sub">Reached Level <span id="levelup-num">2</span></p>
+            </div>
+            <p class="levelup-prompt">Choose an upgrade:</p>
+            <div class="levelup-choices" id="levelup-choices"></div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN MENU ===== -->
+    <div id="menu-screen" class="screen">
+        <div class="menu-container">
+            <div class="menu-header">
+                <div class="menu-logo">
+                    <span class="logo-shadow">SHADOW</span>
+                    <span class="logo-depths">DEPTHS</span>
+                </div>
+                <p class="menu-tagline">Descend into darkness. Rise as a legend.</p>
+            </div>
+            
+            <div class="menu-user-info glass-panel" id="menu-user-info">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-details">
+                    <span class="user-name" id="menu-username">Player</span>
+                    <span class="user-stats" id="menu-user-stats">Best: Floor 0 | Runs: 0</span>
+                </div>
+                <span class="menu-user-badge">Ready</span>
+                <button class="btn-icon" id="logout-btn" title="Logout">Exit</button>
+            </div>
+
+            <section class="menu-welcome-card" id="menu-welcome-card" aria-live="polite">
+                <div class="menu-welcome-row">
+                    <span class="menu-welcome-kicker" id="menu-welcome-kicker">Good evening, Player</span>
+                    <div class="menu-welcome-meta">
+                        <span class="menu-welcome-clock" id="menu-welcome-clock">00:00</span>
+                        <span class="menu-welcome-goal" id="menu-welcome-goal">Goal: Clear Floor 5</span>
+                    </div>
+                </div>
+                <h2 class="menu-welcome-title" id="menu-welcome-title">Welcome back to the command hall.</h2>
+                <p class="menu-welcome-sub" id="menu-welcome-sub">Your path is ready. Start a run and push deeper than before.</p>
+                <div class="menu-welcome-stats">
+                    <div class="menu-welcome-stat">
+                        <span class="menu-welcome-stat-label">Best Floor</span>
+                        <span class="menu-welcome-stat-value" id="menu-welcome-best-floor">0</span>
+                    </div>
+                    <div class="menu-welcome-stat">
+                        <span class="menu-welcome-stat-label">Best Score</span>
+                        <span class="menu-welcome-stat-value" id="menu-welcome-best-score">0</span>
+                    </div>
+                    <div class="menu-welcome-stat">
+                        <span class="menu-welcome-stat-label">Total Runs</span>
+                        <span class="menu-welcome-stat-value" id="menu-welcome-runs">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="menu-section-head">
+                <span class="menu-section-title">Journey Menu</span>
+                <span class="menu-section-sub">Choose where to go next</span>
+            </div>
+
+            <nav class="menu-buttons">
+                <button class="menu-btn menu-btn-continue" id="continue-btn" style="display:none">
+                    <span class="menu-btn-rune">CT</span>
+                    <span class="menu-btn-copy">
+                        <span class="menu-btn-text">Continue Run</span>
+                        <span class="menu-btn-desc">Resume your latest checkpoint</span>
+                    </span>
+                    <span class="menu-btn-arrow">&gt;</span>
+                </button>
+                <button class="menu-btn menu-btn-play" id="play-btn">
+                    <span class="menu-btn-rune">SR</span>
+                    <span class="menu-btn-copy">
+                        <span class="menu-btn-text">Start Run</span>
+                        <span class="menu-btn-desc">Enter the wilds</span>
+                    </span>
+                    <span class="menu-btn-arrow">&gt;</span>
+                </button>
+                <button class="menu-btn menu-btn-leaderboard" id="leaderboard-btn">
+                    <span class="menu-btn-rune">LB</span>
+                    <span class="menu-btn-copy">
+                        <span class="menu-btn-text">Leaderboard</span>
+                        <span class="menu-btn-desc">View top adventurers</span>
+                    </span>
+                    <span class="menu-btn-arrow">&gt;</span>
+                </button>
+                <button class="menu-btn menu-btn-guide" id="howtoplay-btn">
+                    <span class="menu-btn-rune">HP</span>
+                    <span class="menu-btn-copy">
+                        <span class="menu-btn-text">How To Play</span>
+                        <span class="menu-btn-desc">Controls and combat basics</span>
+                    </span>
+                    <span class="menu-btn-arrow">&gt;</span>
+                </button>
+                <button class="menu-btn menu-btn-social" id="social-btn">
+                    <span class="menu-btn-rune">MP</span>
+                    <span class="menu-btn-copy">
+                        <span class="menu-btn-text">Friends & Party</span>
+                        <span class="menu-btn-desc">Chat, invite, and play online</span>
+                    </span>
+                    <span class="menu-btn-arrow">&gt;</span>
+                </button>
+                <button class="menu-btn menu-btn-settings" id="settings-btn">
+                    <span class="menu-btn-rune">ST</span>
+                    <span class="menu-btn-copy">
+                        <span class="menu-btn-text">Settings</span>
+                        <span class="menu-btn-desc">Performance, audio, and gameplay</span>
+                    </span>
+                    <span class="menu-btn-arrow">&gt;</span>
+                </button>
+            </nav>
+            <div class="menu-shortcuts-bar" id="menu-shortcuts-bar" aria-hidden="true">
+                <span class="menu-shortcut-chip">1 Start</span>
+                <span class="menu-shortcut-chip">2 Rank</span>
+                <span class="menu-shortcut-chip">3 Guide</span>
+                <span class="menu-shortcut-chip">4 Party</span>
+                <span class="menu-shortcut-chip">5 Settings</span>
+                <span class="menu-shortcut-chip">C Continue</span>
+            </div>
+        </div>
+        <div class="menu-bg-effect"></div>
+    </div>
+
+    <!-- ===== LEADERBOARD SCREEN ===== -->
+    <div id="leaderboard-screen" class="screen">
+        <div class="leaderboard-container glass-panel">
+            <div class="leaderboard-header">
+                <button class="btn-back" id="lb-back-btn"><- Back</button>
+                <h1 class="section-title">TOP Hall of Legends</h1>
+            </div>
+            <div class="leaderboard-tabs">
+                <button class="lb-tab active" data-sort="score">Score</button>
+                <button class="lb-tab" data-sort="floors">Floors</button>
+                <button class="lb-tab" data-sort="kills">Kills</button>
+            </div>
+            <div class="leaderboard-table" id="leaderboard-table">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SOCIAL / MULTIPLAYER SCREEN ===== -->
+    <div id="social-screen" class="screen">
+        <div class="social-container glass-panel">
+            <div class="social-header">
+                <div class="social-header-main">
+                    <button class="btn-back" id="social-back-btn"><- Back</button>
+                    <div class="social-header-copy">
+                        <h1 class="section-title">MULTI Friends & Party</h1>
+                        <p class="social-header-sub">Build your squad, chat in real-time, and run trails together.</p>
+                    </div>
+                </div>
+                <div class="social-header-actions">
+                    <span class="social-status" id="social-status">Connecting...</span>
+                </div>
+            </div>
+
+            <div class="social-grid">
+                <section class="social-card social-card-friends">
+                    <div class="social-card-head">
+                        <h3 class="social-card-title">Friends</h3>
+                        <span class="social-card-note">Find and connect</span>
+                    </div>
+                    <div class="social-add-row social-add-row-strong">
+                        <input type="text" id="social-friend-input" class="social-input" placeholder="Enter exact username" autocomplete="off">
+                        <button class="btn btn-secondary social-mini-btn" id="social-add-friend-btn" type="button">Add Friend</button>
+                    </div>
+                    <div class="social-subtitle">Requests</div>
+                    <div class="social-list" id="social-requests-list"></div>
+                    <div class="social-subtitle">Friend List</div>
+                    <div class="social-list" id="social-friends-list"></div>
+                </section>
+
+                <section class="social-card social-card-party">
+                    <div class="social-card-head">
+                        <h3 class="social-card-title">Party</h3>
+                        <span class="social-card-note">Invite and coordinate</span>
+                    </div>
+                    <div class="social-row-actions">
+                        <button class="btn btn-secondary social-mini-btn" id="social-create-party-btn" type="button">Create Party</button>
+                        <button class="btn btn-secondary social-mini-btn" id="social-leave-party-btn" type="button">Leave Party</button>
+                    </div>
+                    <div class="social-subtitle">Members</div>
+                    <div class="social-list" id="social-party-members"></div>
+                    <div class="social-subtitle">Invites</div>
+                    <div class="social-list" id="social-party-invites"></div>
+                </section>
+
+                <section class="social-card social-chat-card social-card-chat">
+                    <div class="social-card-head">
+                        <h3 class="social-card-title">Direct Message</h3>
+                        <span class="social-card-note" id="social-chat-hint">Select a friend to begin chat</span>
+                    </div>
+                    <div class="social-chat-title" id="social-chat-title">Select a friend to chat</div>
+                    <div class="social-chat-messages" id="social-chat-messages"></div>
+                    <div class="social-add-row social-chat-compose">
+                        <input type="text" id="social-chat-input" class="social-input" placeholder="Type message and press Enter..." maxlength="300" autocomplete="off">
+                        <button class="btn btn-primary social-mini-btn" id="social-chat-send-btn" type="button">Send</button>
+                    </div>
+                </section>
+            </div>
+
+            <div class="social-notice" id="social-notice"></div>
+        </div>
+    </div>
+
+    <!-- ===== HOW TO PLAY SCREEN ===== -->
+    <div id="howtoplay-screen" class="screen">
+        <div class="howtoplay-container glass-panel">
+            <div class="howtoplay-header">
+                <button class="btn-back" id="htp-back-btn"><- Back</button>
+                <h1 class="section-title">GUIDE How to Play</h1>
+            </div>
+            <div class="controls-grid">
+                <div class="control-card">
+                    <div class="control-keys">W A S D</div>
+                    <p>Move your character</p>
+                </div>
+                <div class="control-card">
+                    <div class="control-keys">MOUSE Move</div>
+                    <p>Aim your weapon</p>
+                </div>
+                <div class="control-card">
+                    <div class="control-keys">MOUSE Click</div>
+                    <p>Attack enemies</p>
+                </div>
+                <div class="control-card">
+                    <div class="control-keys">SPACE</div>
+                    <p>Dash / Class Skill Burst</p>
+                </div>
+                <div class="control-card">
+                    <div class="control-keys">E</div>
+                    <p>Use item / Interact</p>
+                </div>
+                <div class="control-card">
+                    <div class="control-keys">ESC</div>
+                    <p>Pause game</p>
+                </div>
+                <div class="control-card">
+                    <div class="control-keys">TOUCH HUD</div>
+                    <p>Use joystick + ATK / DASH / USE on mobile</p>
+                </div>
+            </div>
+            <div class="tips-section">
+                <h3>TIP Tips</h3>
+                <ul>
+                    <li>Clear all enemies in a room to unlock doors</li>
+                    <li>Dash has a cooldown - use it wisely!</li>
+                    <li>Collect gold coins to boost your final score</li>
+                    <li>Boss rooms appear every 5 floors</li>
+                    <li>Rest rooms restore partial health</li>
+                    <li>Event rooms can grant blessings, trader deals, or challenge waves</li>
+                    <li>Watch Threat and Combo HUD indicators to time aggressive pushes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SETTINGS SCREEN ===== -->
+    <div id="settings-screen" class="screen">
+        <div class="settings-container glass-panel">
+            <div class="settings-header">
+                <button class="btn-back" id="settings-back-btn"><- Back</button>
+                <h1 class="section-title">CFG Settings</h1>
+            </div>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <label>Sound Effects</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sfx-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Music</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="music-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Screen Shake</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="shake-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Show Minimap</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="minimap-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Particles</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="particles-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Performance Mode</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="performance-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Story Dialogues</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="story-toggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label for="fps-cap-select">FPS Cap</label>
+                    <select id="fps-cap-select" class="setting-select">
+                        <option value="0">Unlimited</option>
+                        <option value="120">120 FPS</option>
+                        <option value="90">90 FPS</option>
+                        <option value="60" selected>60 FPS</option>
+                        <option value="45">45 FPS</option>
+                        <option value="30">30 FPS</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="render-scale-select">Render Scale</label>
+                    <select id="render-scale-select" class="setting-select">
+                        <option value="1" selected>100%</option>
+                        <option value="0.85">85%</option>
+                        <option value="0.7">70%</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== GAME SCREEN ===== -->
+    <div id="game-screen" class="screen">
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Touch controls (shown on coarse pointer devices) -->
+        <div class="touch-controls hidden" id="touch-controls">
+            <div class="touch-left">
+                <div class="touch-stick-base" id="touch-stick-base">
+                    <div class="touch-stick-thumb" id="touch-stick-thumb"></div>
+                </div>
+            </div>
+            <div class="touch-right">
+                <button class="touch-btn touch-btn-attack" id="touch-attack-btn" type="button">ATK</button>
+                <button class="touch-btn touch-btn-dash" id="touch-dash-btn" type="button">DASH</button>
+                <button class="touch-btn touch-btn-use" id="touch-use-btn" type="button">USE</button>
+                <button class="touch-btn touch-btn-pause" id="touch-pause-btn" type="button">PAUSE</button>
+            </div>
+        </div>
+        
+        <!-- In-game HUD -->
+        <div class="game-hud" id="game-hud">
+            <div class="hud-top-left">
+                <div class="hud-health" id="hud-health">
+                    <!-- Hearts rendered by JS -->
+                </div>
+                <div class="hud-level-row">
+                    <span class="hud-level-badge" id="hud-level-num">Lv 1</span>
+                    <span class="hud-level-name" id="hud-level-name">Emerald Wilds</span>
+                    <span class="hud-char-badge" id="hud-char-badge">ATK</span>
+                </div>
+                <div class="hud-stage-row">
+                    <span class="hud-stage-label" id="hud-stage-num">Stage 1/5</span>
+                    <div class="hud-stage-pips" id="hud-stage-pips"></div>
+                </div>
+                <div class="hud-xp-bar-wrap">
+                    <span class="hud-xp-label" id="hud-xp-label">XP Lv1</span>
+                    <div class="hud-xp-track">
+                        <div class="hud-xp-fill" id="hud-xp-fill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hud-top-right">
+                <div class="hud-score" id="hud-score">Score: 0</div>
+                <div class="hud-gold" id="hud-gold">Gold: 0</div>
+                <div class="hud-kills" id="hud-kills">Kills: 0</div>
+                <div class="hud-treasures" id="hud-treasures">Relics: 0</div>
+                <div class="hud-threat threat-calm" id="hud-threat">Threat: Calm</div>
+                <div class="hud-combo" id="hud-combo">Combo: x0</div>
+            </div>
+            <div class="hud-bottom-left">
+                <div class="hud-item" id="hud-item">
+                    <span class="item-key">E</span>
+                    <span class="item-icon" id="hud-item-icon">--</span>
+                </div>
+                <div class="hud-dash" id="hud-dash">
+                    <span class="dash-label">DASH</span>
+                    <div class="dash-cooldown-bar">
+                        <div class="dash-cooldown-fill" id="dash-cooldown-fill"></div>
+                    </div>
+                </div>
+                <div class="hud-skill" id="hud-skill">
+                    <span class="skill-label" id="skill-label">SKILL</span>
+                    <div class="skill-cooldown-bar">
+                        <div class="skill-cooldown-fill" id="skill-cooldown-fill"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="hud-minimap" id="hud-minimap">
+                <canvas id="minimap-canvas" width="150" height="150"></canvas>
+            </div>
+        </div>
+
+        <div class="combat-toast hidden" id="combat-toast">ROOM CLEAR</div>
+
+        <div class="party-live-panel hidden" id="party-live-panel">
+            <div class="party-live-title" id="party-live-title">Party Sync</div>
+            <div class="party-live-list" id="party-live-list"></div>
+        </div>
+
+        <!-- Story / Quest tracker -->
+        <div class="story-panel hidden" id="story-panel">
+            <div class="story-chapter" id="story-chapter">Chapter I - The Forest Breach</div>
+            <div class="story-objective" id="story-objective">Neutralize hostiles: 0/0</div>
+            <div class="story-progress" id="story-progress">In progress</div>
+            <div class="story-lockhint hidden" id="story-lockhint">Stairs locked</div>
+        </div>
+
+        <!-- Story dialogue -->
+        <div class="dialogue-overlay hidden" id="dialogue-overlay">
+            <div class="dialogue-box">
+                <div class="dialogue-speaker" id="dialogue-speaker">Commander</div>
+                <div class="dialogue-text" id="dialogue-text">Dialogue text</div>
+                <div class="dialogue-actions">
+                    <button class="btn btn-secondary dialogue-btn" id="dialogue-skip-btn">Skip</button>
+                    <button class="btn btn-primary dialogue-btn" id="dialogue-next-btn">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage event modal -->
+        <div class="event-overlay hidden" id="event-overlay">
+            <div class="event-panel glass-panel">
+                <div class="event-chip" id="event-chip">EVENT</div>
+                <h3 class="event-title" id="event-title">Unknown Signal</h3>
+                <p class="event-desc" id="event-desc">Choose how to proceed.</p>
+                <div class="event-options" id="event-options"></div>
+            </div>
+        </div>
+
+        <!-- Boss HP Bar -->
+        <div class="boss-hpbar-wrap hidden" id="boss-hpbar-wrap">
+            <div class="boss-hpbar-header">
+                <span class="boss-hpbar-icon" id="boss-hpbar-icon">BOSS</span>
+                <div class="boss-hpbar-names">
+                    <span class="boss-hpbar-name" id="boss-hpbar-name">Bone Colossus</span>
+                    <span class="boss-hpbar-subtitle" id="boss-hpbar-subtitle">Guardian of the Wilds</span>
+                </div>
+                <span class="boss-hpbar-phase" id="boss-hpbar-phase"></span>
+            </div>
+            <div class="boss-hpbar-track">
+                <div class="boss-hpbar-fill" id="boss-hpbar-fill" style="width:100%"></div>
+                <div class="boss-hpbar-phase-line"></div>
+            </div>
+            <div class="boss-hpbar-footer">
+                <span id="boss-hpbar-hp">100 / 100</span>
+            </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div class="pause-overlay hidden" id="pause-overlay">
+            <div class="pause-menu glass-panel">
+                <h2>PAUSE Paused</h2>
+                <button class="btn btn-primary" id="resume-btn">Resume</button>
+                <button class="btn btn-secondary" id="quit-btn">Quit to Menu</button>
+            </div>
+        </div>
+
+        <!-- Stage Transition -->
+        <div class="floor-transition hidden" id="floor-transition">
+            <div class="floor-transition-text" id="floor-transition-text">Stage 2</div>
+            <div class="floor-transition-sub" id="floor-transition-sub">Emerald Wilds</div>
+        </div>
+    </div>
+
+    <!-- ===== GAME OVER SCREEN ===== -->
+    <div id="gameover-screen" class="screen">
+        <div class="gameover-container">
+            <h1 class="gameover-title">YOU HAVE FALLEN</h1>
+            <div class="gameover-stats glass-panel">
+                <div class="stat-row">
+                    <span class="stat-label">Score</span>
+                    <span class="stat-value" id="go-score">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Floors Cleared</span>
+                    <span class="stat-value" id="go-floors">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Enemies Slain</span>
+                    <span class="stat-value" id="go-kills">0</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Gold Collected</span>
+                    <span class="stat-value" id="go-gold">0</span>
+                </div>
+                <div class="stat-row highlight" id="go-newbest-row" style="display:none">
+                    <span class="stat-label">NEW BEST!</span>
+                    <span class="stat-value">NEW</span>
+                </div>
+            </div>
+            <div class="gameover-buttons">
+                <button class="btn btn-primary" id="retry-btn">
+                    <span class="btn-text">ATK Try Again</span>
+                </button>
+                <button class="btn btn-secondary" id="go-menu-btn">
+                    <span class="btn-text">HOME Main Menu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script loader -->
+    <script>
+        (function () {
+            'use strict';
+            const BUILD_VERSION = '20260504c';
+
+            // Supports both layouts:
+            // 1) Modular folders (js/core, js/ui, js/entities, ...)
+            // 2) Flat folder (js/*.js)
+            const scriptPairs = [
+                ['js/core/utils.js', 'js/utils.js'],
+                ['js/core/sprites.js', 'js/sprites.js'],
+                ['js/core/audio.js', 'js/audio.js'],
+                ['js/core/particles.js', 'js/particles.js'],
+                ['js/ui/auth.js', 'js/auth.js'],
+                ['js/systems/social.js', 'js/social.js'],
+                ['js/ui/leaderboard.js', 'js/leaderboard.js'],
+                ['js/ui/hud.js', 'js/hud.js'],
+                ['js/world/dungeon.js', 'js/dungeon.js'],
+                ['js/world/items.js', 'js/items.js'],
+                ['js/systems/story.js', 'js/story.js'],
+                ['js/entities/enemy.js', 'js/enemy.js'],
+                ['js/entities/boss.js', 'js/boss.js'],
+                ['js/entities/characters.js', 'js/characters.js'],
+                ['js/entities/player.js', 'js/player.js'],
+                ['js/systems/combat.js', 'js/combat.js'],
+                ['js/core/game.js', 'js/game.js'],
+                ['js/core/main.js', 'js/main.js']
+            ];
+
+            const loadingText = document.getElementById('loading-text');
+
+            function loadScript(src) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = `${src}?v=${BUILD_VERSION}`;
+                    script.onload = () => resolve(src);
+                    script.onerror = () => reject(new Error('Failed to load: ' + src));
+                    document.body.appendChild(script);
+                });
+            }
+
+            async function loadWithFallback(primary, fallback) {
+                try {
+                    return await loadScript(primary);
+                } catch (_err) {
+                    return loadScript(fallback);
+                }
+            }
+
+            async function bootstrap() {
+                for (const [primary, fallback] of scriptPairs) {
+                    const loaded = await loadWithFallback(primary, fallback);
+                    if (loadingText) {
+                        loadingText.textContent = 'Loading ' + loaded + '...';
+                    }
+                }
+            }
+
+            bootstrap().catch((err) => {
+                console.error(err);
+                if (loadingText) {
+                    loadingText.textContent = 'Startup error: required game files are missing.';
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

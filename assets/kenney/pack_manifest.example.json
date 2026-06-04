@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "name": "Example external asset mapping",
+    "version": "1.0.0",
+    "description": "Copy this file to pack_manifest.json and map each key to your downloaded free sprites."
+  },
+  "sprites": {
+    "tile_floor_1": "assets/kenney/imported/level1/floor.png",
+    "tile_floor_2": "assets/kenney/imported/level2/floor.png",
+    "tile_floor_3": "assets/kenney/imported/level3/floor.png",
+    "tile_floor_4": "assets/kenney/imported/level4/floor.png",
+    "tile_floor_5": "assets/kenney/imported/level5/floor.png",
+    "tile_wall_1": "assets/kenney/imported/level1/wall.png",
+    "tile_wall_2": "assets/kenney/imported/level2/wall.png",
+    "tile_wall_3": "assets/kenney/imported/level3/wall.png",
+    "tile_wall_4": "assets/kenney/imported/level4/wall.png",
+    "tile_wall_5": "assets/kenney/imported/level5/wall.png",
+    "tile_stairs": "assets/kenney/imported/common/stairs.png",
+    "tile_chest": "assets/kenney/imported/common/chest.png",
+    "setpiece_crate": "assets/kenney/imported/props/crate.png",
+    "setpiece_bones": "assets/kenney/imported/props/bones.png",
+    "setpiece_urn": "assets/kenney/imported/props/urn.png",
+    "setpiece_rubble": "assets/kenney/imported/props/rubble.png",
+    "setpiece_pillar_broken": "assets/kenney/imported/props/pillar_broken.png",
+    "setpiece_barrel": "assets/kenney/imported/props/barrel.png",
+    "setpiece_mushroom_patch": "assets/kenney/imported/props/mushroom_patch.png",
+    "setpiece_slime_pod": "assets/kenney/imported/props/slime_pod.png",
+    "setpiece_pipe_scrap": "assets/kenney/imported/props/pipe_scrap.png",
+    "setpiece_brazier": "assets/kenney/imported/props/brazier.png",
+    "setpiece_char_pile": "assets/kenney/imported/props/char_pile.png",
+    "setpiece_spike_barricade": "assets/kenney/imported/props/spike_barricade.png",
+    "setpiece_crystal_cluster": "assets/kenney/imported/props/crystal_cluster.png",
+    "setpiece_arc_node": "assets/kenney/imported/props/arc_node.png",
+    "setpiece_void_obelisk": "assets/kenney/imported/props/void_obelisk.png",
+    "setpiece_rune_totem": "assets/kenney/imported/props/rune_totem.png",
+    "setpiece_altar": "assets/kenney/imported/props/altar.png",
+    "setpiece_blood_spikes": "assets/kenney/imported/props/blood_spikes.png",
+    "setpiece_cursed_statue": "assets/kenney/imported/props/cursed_statue.png",
+    "tile_floor_1_m0": "assets/kenney/imported/level1/autotile/floor_mask_0.png",
+    "tile_floor_1_m15": "assets/kenney/imported/level1/autotile/floor_mask_15.png",
+    "tile_wall_1_m0": "assets/kenney/imported/level1/autotile/wall_mask_0.png",
+    "tile_wall_1_m15": "assets/kenney/imported/level1/autotile/wall_mask_15.png"
+  },
+  "spriteSheets": {
+    "player_warrior": {
+      "path": "assets/kenney/imported/characters/player_warrior_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4,
+      "animations": {
+        "idle": { "frames": [1], "fps": 1 },
+        "walk": { "frames": [0, 1, 2, 3], "fps": 8 },
+        "attack": { "frames": [0, 1, 2, 3], "fps": 12 }
+      }
+    },
+    "player_rogue": {
+      "path": "assets/kenney/imported/characters/player_rogue_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "player_mage": {
+      "path": "assets/kenney/imported/characters/player_mage_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "player_paladin": {
+      "path": "assets/kenney/imported/characters/player_paladin_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "enemy_skeleton": {
+      "path": "assets/kenney/imported/enemies/enemy_skeleton_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "enemy_archer": {
+      "path": "assets/kenney/imported/enemies/enemy_archer_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "enemy_mage": {
+      "path": "assets/kenney/imported/enemies/enemy_mage_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "enemy_slime": {
+      "path": "assets/kenney/imported/enemies/enemy_slime_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "enemy_bat": {
+      "path": "assets/kenney/imported/enemies/enemy_bat_sheet.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4
+    },
+    "boss_titan": {
+      "path": "assets/kenney/imported/bosses/boss_titan_sheet.png",
+      "frameWidth": 64,
+      "frameHeight": 64,
+      "columns": 4,
+      "rows": 4
+    }
+  }
+}

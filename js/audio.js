@@ -1,0 +1,119 @@
+/* ============================================
+   AUDIO — Sound effects using Web Audio API
+   ============================================ */
+
+const Audio = (() => {
+    let ctx = null;
+    let sfxEnabled = true;
+    let musicEnabled = true;
+
+    function getCtx() {
+        if (!ctx) {
+            ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return ctx;
+    }
+
+    // Generate a simple oscillator-based sound effect
+    function playSFX(type) {
+        if (!sfxEnabled) return;
+        const c = getCtx();
+        const osc = c.createOscillator();
+        const gain = c.createGain();
+        osc.connect(gain);
+        gain.connect(c.destination);
+
+        switch(type) {
+            case 'hit':
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, c.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.15);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.15);
+                break;
+            case 'slash':
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(400, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, c.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.12, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.1);
+                break;
+            case 'pickup':
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(900, c.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.1, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.2);
+                break;
+            case 'dash':
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(600, c.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.08, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.1);
+                break;
+            case 'death':
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, c.currentTime + 0.5);
+                gain.gain.setValueAtTime(0.2, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.5);
+                break;
+            case 'levelup':
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, c.currentTime);
+                osc.frequency.setValueAtTime(500, c.currentTime + 0.1);
+                osc.frequency.setValueAtTime(700, c.currentTime + 0.2);
+                osc.frequency.setValueAtTime(900, c.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.1, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.5);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.5);
+                break;
+            case 'coin':
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, c.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.08, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.12);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.12);
+                break;
+            case 'enemydeath':
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(250, c.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(50, c.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.2);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.2);
+                break;
+            case 'click':
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, c.currentTime);
+                gain.gain.setValueAtTime(0.05, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.05);
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.05);
+                break;
+        }
+    }
+
+    return {
+        playSFX,
+        setSFXEnabled(v) { sfxEnabled = v; },
+        setMusicEnabled(v) { musicEnabled = v; },
+        get sfxEnabled() { return sfxEnabled; },
+        get musicEnabled() { return musicEnabled; }
+    };
+})();

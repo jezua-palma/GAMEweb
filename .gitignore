@@ -1,0 +1,23 @@
+# Logs
+*.log
+public_tunnel.log
+public_tunnel.err.log
+server.err.log
+server.out.log
+
+# SQLite Database files
+*.db
+*.db-shm
+*.db-wal
+shadow_depths.db
+shadow_depths.db-shm
+shadow_depths.db-wal
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Local environments / IDEs
+.env
+.vscode/
+.idea/

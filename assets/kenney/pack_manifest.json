@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "name": "Shadow Depths built-in battlefield sprite set",
+    "version": "1.0.0",
+    "description": "Default SVG sprites used by dungeon.js. Character/enemy sprite-sheet overrides are defined in pack_manifest.example.json."
+  },
+  "sprites": {
+    "tile_floor": "assets/kenney/base/tile_floor.svg",
+    "tile_floor_1": "assets/kenney/base/tile_floor_l1.svg",
+    "tile_floor_2": "assets/kenney/base/tile_floor_l2.svg",
+    "tile_floor_3": "assets/kenney/base/tile_floor_l3.svg",
+    "tile_floor_4": "assets/kenney/base/tile_floor_l4.svg",
+    "tile_floor_5": "assets/kenney/base/tile_floor_l5.svg",
+    "tile_wall": "assets/kenney/base/tile_wall.svg",
+    "tile_wall_1": "assets/kenney/base/tile_wall_l1.svg",
+    "tile_wall_2": "assets/kenney/base/tile_wall_l2.svg",
+    "tile_wall_3": "assets/kenney/base/tile_wall_l3.svg",
+    "tile_wall_4": "assets/kenney/base/tile_wall_l4.svg",
+    "tile_wall_5": "assets/kenney/base/tile_wall_l5.svg",
+    "tile_stairs": "assets/kenney/base/tile_stairs.svg",
+    "tile_chest": "assets/kenney/base/tile_chest.svg",
+    "setpiece_crate": "assets/kenney/base/setpiece_crate.svg",
+    "setpiece_barrel": "assets/kenney/base/setpiece_barrel.svg",
+    "setpiece_brazier": "assets/kenney/base/setpiece_brazier.svg",
+    "setpiece_crystal_cluster": "assets/kenney/base/setpiece_crystal_cluster.svg",
+    "setpiece_altar": "assets/kenney/base/setpiece_altar.svg",
+    "setpiece_void_obelisk": "assets/kenney/base/setpiece_void_obelisk.svg",
+    "setpiece_cursed_statue": "assets/kenney/base/setpiece_cursed_statue.svg",
+    "setpiece_rubble": "assets/kenney/base/setpiece_rubble.svg",
+    "setpiece_bones": "assets/kenney/base/setpiece_bones.svg",
+    "setpiece_urn": "assets/kenney/base/setpiece_urn.svg"
+  }
+}
