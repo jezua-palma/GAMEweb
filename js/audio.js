@@ -109,10 +109,71 @@ const Audio = (() => {
         }
     }
 
+    let musicInterval = null;
+    let musicIndex = 0;
+    const musicNotes = [
+        110.00, 110.00, 130.81, 110.00, // A2, A2, C3, A2
+        87.31, 87.31, 98.00, 98.00     // F2, F2, G2, G2
+    ];
+
+    function startMusic() {
+        if (!musicEnabled) return;
+        stopMusic();
+        
+        const c = getCtx();
+        musicIndex = 0;
+        musicInterval = setInterval(() => {
+            if (!musicEnabled) return;
+            try {
+                if (c.state === 'suspended') {
+                    c.resume();
+                }
+                
+                const osc = c.createOscillator();
+                const gain = c.createGain();
+                osc.connect(gain);
+                gain.connect(c.destination);
+                
+                const note = musicNotes[musicIndex % musicNotes.length];
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(note, c.currentTime);
+                
+                // Subtle volume
+                gain.gain.setValueAtTime(0.018, c.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.36);
+                
+                osc.start(c.currentTime);
+                osc.stop(c.currentTime + 0.38);
+                
+                musicIndex++;
+            } catch(e) {
+                // Ignore audio context errors
+            }
+        }, 400);
+    }
+
+    function stopMusic() {
+        if (musicInterval) {
+            clearInterval(musicInterval);
+            musicInterval = null;
+        }
+    }
+
     return {
         playSFX,
+        startMusic,
+        stopMusic,
         setSFXEnabled(v) { sfxEnabled = v; },
-        setMusicEnabled(v) { musicEnabled = v; },
+        setMusicEnabled(v) { 
+            musicEnabled = v; 
+            if (!musicEnabled) {
+                stopMusic();
+            } else {
+                if (typeof Game !== 'undefined' && Game.running && !Game.paused) {
+                    startMusic();
+                }
+            }
+        },
         get sfxEnabled() { return sfxEnabled; },
         get musicEnabled() { return musicEnabled; }
     };

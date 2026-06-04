@@ -177,6 +177,9 @@ const Player = (() => {
                 my = this.dashDirY * currentSpeed * dt;
                 this.dashTimer -= dt;
                 if (this.dashTimer <= 0) this.dashing = false;
+                if (typeof Particles !== 'undefined' && Particles.emitTrail) {
+                    Particles.emitTrail(this.x, this.y, this.charDef.color || '#a78bfa');
+                }
             } else {
                 const norm = Utils.normalize(this.moveX, this.moveY);
                 mx = norm.x * currentSpeed * dt;

@@ -1358,6 +1358,9 @@ const Game = (() => {
             Story.resetRun(heroName || charDef?.name || 'Hero', charDef?.name || 'Unknown');
         }
         generateStage(charDef, heroName);
+        if (typeof Audio !== 'undefined' && Audio.startMusic) {
+            Audio.startMusic();
+        }
 
         Utils.showScreen('game-screen');
         HUD.show();
@@ -1582,6 +1585,9 @@ const Game = (() => {
         }
 
         saveRunCheckpoint('resume_sync');
+        if (typeof Audio !== 'undefined' && Audio.startMusic) {
+            Audio.startMusic();
+        }
         lastTime = performance.now();
         requestAnimationFrame(gameLoop);
         return true;
@@ -1896,11 +1902,17 @@ const Game = (() => {
             setTouchControlsVisible(false);
             saveRunCheckpoint('pause');
             pushPresence('away', true);
+            if (typeof Audio !== 'undefined' && Audio.stopMusic) {
+                Audio.stopMusic();
+            }
         } else {
             overlay.classList.add('hidden');
             canvas.style.cursor = 'none';
             setTouchControlsVisible(true);
             pushPresence('in_run', true);
+            if (typeof Audio !== 'undefined' && Audio.startMusic) {
+                Audio.startMusic();
+            }
             lastTime = performance.now();
             requestAnimationFrame(gameLoop);
         }
@@ -1918,6 +1930,9 @@ const Game = (() => {
         clearPartyLiveSnapshot();
         clearCoopRuntimeState();
         pushPresence('online', false);
+        if (typeof Audio !== 'undefined' && Audio.stopMusic) {
+            Audio.stopMusic();
+        }
         resetInputState();
         canvas.style.cursor = 'default';
         HUD.hide();
@@ -2497,6 +2512,9 @@ const Game = (() => {
         clearPartyLiveSnapshot();
         clearCoopRuntimeState();
         pushPresence('online', false);
+        if (typeof Audio !== 'undefined' && Audio.stopMusic) {
+            Audio.stopMusic();
+        }
         resetInputState();
         HUD.hide();
         canvas.style.cursor = 'default';
@@ -2646,6 +2664,7 @@ const Game = (() => {
         loadSettings,
         updateSetting,
         get running() { return running; },
+        get paused()  { return paused; },
         get settings() { return settings; },
         get boss()    { return boss; },
         get enemies() { return enemies; },
